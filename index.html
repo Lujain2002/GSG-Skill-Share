@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>SkillShare Platform (Phase 1)</title>
+		<meta name="description" content="Peer-to-peer skill sharing platform" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<script>
+		// Prevent flash: read saved theme before React mounts
+		(function(){
+		  try {
+		    const raw = localStorage.getItem('ss_theme');
+		    if(raw){
+		      const { mode } = JSON.parse(raw);
+		      if(mode==='light') {
+		        document.documentElement.style.background='#f5f6f8';
+		        document.documentElement.dataset.colorMode='light';
+		      } else {
+		        document.documentElement.style.background='#0f1115';
+		        document.documentElement.dataset.colorMode='dark';
+		      }
+		    }
+		  } catch(e){}
+		})();
+		</script>
+	</head>
+	<body>
+		<div id="root"></div>
+		<script type="module" src="/src/main.jsx"></script>
+	</body>
+</html>
