@@ -1,5 +1,6 @@
-# This workflow will do a clean installation of node dependencies, cache/restore them, build the source code and run tests across different versions of node
-# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-nodejs
+# This workflow installs dependencies, (optionally) builds, and prints the repository URL.
+# Removed the npm test step since you said you don't need tests.
+# Added a step to output and summarize the repository URL.
 
 name: Node.js CI
 
@@ -11,21 +12,36 @@ on:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
 
     strategy:
       matrix:
         node-version: [18.x, 20.x, 22.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
-    - uses: actions/checkout@v4
-    - name: Use Node.js ${{ matrix.node-version }}
-      uses: actions/setup-node@v4
-      with:
-        node-version: ${{ matrix.node-version }}
-        cache: 'npm'
-    - run: npm ci
-    - run: npm run build --if-present
-    # - run: npm test
+      - uses: actions/checkout@v4
+
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Build (if build script exists)
+        run: npm run build --if-present
+
+      # Prints the repository URL and exposes it as a step output
+      - id: repo_url
+        name: Show repository URL
+        run: |
+          REPO_URL="${{ github.server_url }}/${{ github.repository }}"
+          echo "Repository URL: $REPO_URL"
+          echo "url=$REPO_URL" >> "$GITHUB_OUTPUT"
+
+      # Adds the URL to the job summary (visible in the Actions run UI)
+      - name: Add URL to job summary
+        run: |
+          echo "Repository URL: ${{ steps.repo_url.outputs.url }}" >> "$GITHUB_STEP_SUMMARY"
