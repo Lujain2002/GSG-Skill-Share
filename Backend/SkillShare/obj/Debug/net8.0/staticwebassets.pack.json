@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "PackagePath": "staticwebassets\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.SkillShare.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.build.SkillShare.props",
+      "PackagePath": "build\\SkillShare.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildMultiTargeting.SkillShare.props",
+      "PackagePath": "buildMultiTargeting\\SkillShare.props"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.buildTransitive.SkillShare.props",
+      "PackagePath": "buildTransitive\\SkillShare.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
