@@ -15,7 +15,7 @@ import {
 import { validateSkill } from '../utils/validation';
 
 const API_BASE = 'http://localhost:5044';
-const LEVELS = ['Beginner', 'Intermediate', 'Advanced']; // enum ترتيب: 0,1,2
+const LEVELS = ['Beginner', 'Intermediate', 'Advanced']; // enum : 0,1,2
 
 function SkillList({ title, list, onRemove }) {
   return (
@@ -50,7 +50,6 @@ export default function SkillEditor() {
   const [categoryId, setCategoryId] = useState('');
   const [skillError, setSkillError] = useState('');
 
-  // 🟢 جلب الكاتيجوريز من السيرفر
   useEffect(() => {
     fetch(`${API_BASE}/api/Categories/`)
       .then(r => r.json())
@@ -58,13 +57,11 @@ export default function SkillEditor() {
       .catch(console.error);
   }, []);
 
-  // 🟢 جلب مهارات المستخدم الحالية
   useEffect(() => {
     if (!currentUser?.id) return;
     fetch(`${API_BASE}/api/UserSkills/${currentUser.id}`)
       .then(r => r.json())
       .then(data => {
-        // تقسيم إلى teach و learn
         const teachList = [];
         const learnList = [];
         data.forEach(d => {
@@ -107,7 +104,6 @@ export default function SkillEditor() {
   };
 
   const removeTeach = (s) => {
-    // حذف من الواجهة فقط، (يمكنك عمل DELETE على السيرفر أيضاً)
     setTeach(teach.filter(x => x !== s));
     if (s.id) fetch(`${API_BASE}/api/UserSkills/${s.id}`, { method: 'DELETE' });
   };
@@ -122,7 +118,6 @@ export default function SkillEditor() {
                        ...learn.map(s => ({ ...s, type: 1 }))];
 
     for (const s of newSkills) {
-      // إذا ما عنده id يعني جديد
       if (!s.id) {
         await fetch(`${API_BASE}/api/UserSkills/`, {
           method: 'POST',
@@ -137,7 +132,6 @@ export default function SkillEditor() {
         });
       }
     }
-    // ممكن تعمل إعادة جلب بعد الحفظ
   };
 
   return (
