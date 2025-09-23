@@ -46,7 +46,7 @@ function InnerApp() {
         {tab==='points' && <Points />}
       </div>
       {bookFor && <BookSessionModal teacher={bookFor} onClose={()=>setBookFor(null)} />}
-      <footer>SkillShare Phase 1 Prototype · LocalStorage · {new Date().getFullYear()}</footer>
+  
     </>
   );
 }

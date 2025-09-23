@@ -7,21 +7,18 @@
 		<meta name="description" content="Peer-to-peer skill sharing platform" />
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<script>
-		// Prevent flash: read saved theme before React mounts
+		// Prevent flash: set data attribute only (let CSS control backgrounds)
 		(function(){
 		  try {
 		    const raw = localStorage.getItem('ss_theme');
-		    if(raw){
-		      const { mode } = JSON.parse(raw);
-		      if(mode==='light') {
-		        document.documentElement.style.background='#f5f6f8';
-		        document.documentElement.dataset.colorMode='light';
-		      } else {
-		        document.documentElement.style.background='#0f1115';
-		        document.documentElement.dataset.colorMode='dark';
-		      }
+		    if(!raw) return;
+		    const { mode } = JSON.parse(raw);
+		    if(mode==='light') {
+		      document.documentElement.dataset.colorMode='light';
+		    } else {
+		      document.documentElement.dataset.colorMode='dark';
 		    }
-		  } catch(e){}
+		  } catch(_){}
 		})();
 		</script>
 	</head>
