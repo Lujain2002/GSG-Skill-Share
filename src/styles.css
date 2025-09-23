@@ -204,6 +204,8 @@ html[data-color-mode='light'] .segmented button.active { color:var(--text); }
 @media (max-width:620px){ .matches-filters select, .matches-filters input { max-width:100%; flex:1; } }
 .matches-grid { display:grid; gap:1.15rem; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); }
 .match-card { position:relative; background:var(--surface-alt); border:1px solid var(--border-alt); padding:1.15rem 1.15rem 1.2rem; border-radius:14px; display:flex; flex-direction:column; gap:.85rem; overflow:hidden; transition:background .25s ease,border-color .3s ease, transform .25s ease, box-shadow .25s ease; min-height:245px; }
+.match-card.exchanged { opacity:.65; }
+.match-card.exchanged:hover { opacity:.85; }
 .match-card::before { content:""; position:absolute; inset:0; pointer-events:none; background:radial-gradient(circle at 85% 15%,rgba(90,155,255,.14),transparent 68%); opacity:.65; }
 .match-card:hover { border-color:#2563ebcc; transform:translateY(-6px); box-shadow:0 10px 30px -12px rgba(0,0,0,.5); }
 .match-card-head { display:flex; align-items:center; gap:.85rem; }

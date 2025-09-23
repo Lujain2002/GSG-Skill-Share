@@ -1,6 +1,6 @@
 ﻿<Project>
   <ItemGroup>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\AvatarImages\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\AvatarImages\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png'))">
       <SourceType>Package</SourceType>
       <SourceId>SkillShare</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
@@ -12,9 +12,11 @@
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
+      <Fingerprint>b7cdey1shy</Fingerprint>
+      <Integrity>+dr+AMvI8nXBp4t2OisILQdIONuFK6JOwZP9tfB7x0Q=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath($(MSBuildThisFileDirectory)..\staticwebassets\AvatarImages\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\AvatarImages\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png'))</OriginalItemSpec>
     </StaticWebAsset>
   </ItemGroup>
 </Project>

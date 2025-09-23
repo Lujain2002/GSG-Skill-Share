@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+// using Microsoft.EntityFrameworkCore.Sqlite; // switched to SQL Server
 using Microsoft.IdentityModel.Tokens;
 using SkillShare.Data;
 using SkillShare.Models;
@@ -18,7 +19,7 @@ namespace SkillShare
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
             builder.Services.AddIdentity<AppUser, IdentityRole>()
@@ -36,7 +37,7 @@ options.TokenValidationParameters = new TokenValidationParameters
  ValidIssuer = builder.Configuration["JWT:Issuer"],
  ValidAudience = builder.Configuration["JWT:Audience"],
  IssuerSigningKey = new SymmetricSecurityKey(
-     Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])
+     Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"] ?? "DEV_FALLBACK_KEY_CHANGE_ME")
  )
 };
 });

@@ -1,0 +1,33 @@
+{
+  "Files": [
+    {
+      "Id": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "PackagePath": "staticwebassets\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png"
+    },
+    {
+      "Id": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg",
+      "PackagePath": "staticwebassets\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.SkillShare.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.SkillShare.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.build.SkillShare.props",
+      "PackagePath": "build\\SkillShare.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildMultiTargeting.SkillShare.props",
+      "PackagePath": "buildMultiTargeting\\SkillShare.props"
+    },
+    {
+      "Id": "obj\\Debug\\net9.0\\staticwebassets\\msbuild.buildTransitive.SkillShare.props",
+      "PackagePath": "buildTransitive\\SkillShare.props"
+    }
+  ],
+  "ElementsToRemove": []
+}

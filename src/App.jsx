@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { AuthProvider, useAuth } from './context/AuthContext';
+import React, { useState, useEffect } from 'react';
+import { useAuth } from './context/AuthContext';
 import AuthTabs from './components/AuthTabs';
 import NavBar from './components/NavBar';
 import SkillEditor from './components/SkillEditor';
@@ -13,6 +13,22 @@ import BookSessionModal from './components/BookSessionModal';
 function InnerApp() {
   const { currentUser } = useAuth();
   const [tab,setTab] = useState('dashboard');
+
+  // Load last tab per user when user changes
+  // Key pattern: skillshare:lastTab:<userId>
+  useEffect(() => {
+    if (currentUser?.id) {
+      const stored = localStorage.getItem(`skillshare:lastTab:${currentUser.id}`);
+      if (stored) setTab(stored);
+    }
+  }, [currentUser?.id]);
+
+  // Persist tab changes per user
+  useEffect(() => {
+    if (currentUser?.id && tab) {
+      localStorage.setItem(`skillshare:lastTab:${currentUser.id}`, tab);
+    }
+  }, [tab, currentUser?.id]);
   const [bookFor,setBookFor] = useState(null);
   if (!currentUser) {
     return (
@@ -20,23 +36,13 @@ function InnerApp() {
         <h1 style={{textAlign:'center'}}>SkillShare – Phase 1 Prototype</h1>
         <p style={{textAlign:'center'}} className="muted">Peer skill exchange with a points economy.</p>
         <AuthTabs />
-        <div className="card" style={{marginTop:'1.5rem'}}>
-          <h3>About (Demo)</h3>
-          <p style={{fontSize:'.8rem',lineHeight:1.4}}>Local prototype. Data lives only in your browser (localStorage). Create multiple demo users to explore matching, booking and the points economy.</p>
-          <ul style={{fontSize:'.75rem',lineHeight:1.4}}>
-            <li>User mgmt: register / login</li>
-            <li>Skills: manage teach & learn lists</li>
-            <li>Matching: overlap scoring</li>
-            <li>Points: earn teaching, spend booking</li>
-            <li>Sessions: book · complete · cancel</li>
-          </ul>
-        </div>
+     
       </div>
     );
   }
   return (
     <>
-      <NavBar active={tab} onChange={setTab} />
+  <NavBar active={tab} onChange={setTab} />
       <div className="container">
   {tab==='dashboard' && <Dashboard />}
   {tab==='profile' && <Profile />}
@@ -51,6 +57,4 @@ function InnerApp() {
   );
 }
 
-export default function App() {
-  return <AuthProvider><InnerApp /></AuthProvider>;
-}
+export default function App() { return <InnerApp />; }

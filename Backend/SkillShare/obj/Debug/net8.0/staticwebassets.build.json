@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "sD0tYhrtzzDKud4kq2NiBE7zSP8yCIVOZnMeAeMwRn0=",
+  "Hash": "c0M+DAt61Fn7WwiQ+Tn9B9TWuZ+7OTxbhwuOBfw8cSg=",
   "Source": "SkillShare",
   "BasePath": "_content/SkillShare",
   "Mode": "Default",
@@ -10,30 +10,116 @@
     {
       "Name": "SkillShare\\wwwroot",
       "Source": "SkillShare",
-      "ContentRoot": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\",
       "BasePath": "_content/SkillShare",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "Identity": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
       "SourceId": "SkillShare",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\",
       "BasePath": "_content/SkillShare",
-      "RelativePath": "AvatarImages/0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "RelativePath": "AvatarImages/0f94fb30-fb18-452e-ad75-f1a0b319ff31#[.{fingerprint}]?.png",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeBehavior": "",
       "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
+      "Fingerprint": "b7cdey1shy",
+      "Integrity": "+dr+AMvI8nXBp4t2OisILQdIONuFK6JOwZP9tfB7x0Q=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "AvatarImages/0f94fb30-fb18-452e-ad75-f1a0b319ff31.b7cdey1shy.png",
+      "AssetFile": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "41559"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"+dr+AMvI8nXBp4t2OisILQdIONuFK6JOwZP9tfB7x0Q=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 22 Sep 2025 15:48:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "b7cdey1shy"
+        },
+        {
+          "Name": "label",
+          "Value": "AvatarImages/0f94fb30-fb18-452e-ad75-f1a0b319ff31.png"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-+dr+AMvI8nXBp4t2OisILQdIONuFK6JOwZP9tfB7x0Q="
+        }
+      ]
+    },
+    {
+      "Route": "AvatarImages/0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "AssetFile": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "41559"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/png"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"+dr+AMvI8nXBp4t2OisILQdIONuFK6JOwZP9tfB7x0Q=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 22 Sep 2025 15:48:53 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-+dr+AMvI8nXBp4t2OisILQdIONuFK6JOwZP9tfB7x0Q="
+        }
+      ]
     }
   ]
 }
