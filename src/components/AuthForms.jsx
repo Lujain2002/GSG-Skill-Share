@@ -28,7 +28,7 @@ export function LoginForm({ compact }) {
     if (disabled) return;
 
     try {
-      await login(email,password);    // ← استدعاء API
+      await login(email,password);    //  API
     } catch(err) {
       setError(err.message);
     }

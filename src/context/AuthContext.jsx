@@ -45,9 +45,9 @@ export function AuthProvider({ children }) {
     });
     if (!res.ok) throw new Error(await res.text() || 'Registration failed');
 
-    const data = await res.json(); // ← المفترض ترجع الباك اند بيانات المستخدم + token
+    const data = await res.json(); 
     if (data.token) localStorage.setItem('token', data.token);
-    if (data.user) setCurrentUser(data.user); // ← استخدم مباشرة بيانات المستخدم
+    if (data.user) setCurrentUser(data.user);
   };
 
   const login = async (email, password) => {
