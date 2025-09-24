@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "sD0tYhrtzzDKud4kq2NiBE7zSP8yCIVOZnMeAeMwRn0=",
+  "Hash": "RXjvaPSzaSjbZ6PWXdADz5OGi5fbxXfzfray7cYZ5nE=",
   "Source": "SkillShare",
   "BasePath": "_content/SkillShare",
   "Mode": "Default",
@@ -17,12 +17,12 @@
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "Identity": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg",
       "SourceId": "SkillShare",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\",
       "BasePath": "_content/SkillShare",
-      "RelativePath": "AvatarImages/0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "RelativePath": "AvatarImages/49142b88-fe25-4661-b506-fdba1320fff0.jpg",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -33,7 +33,7 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png"
+      "OriginalItemSpec": "wwwroot\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg"
     }
   ]
 }

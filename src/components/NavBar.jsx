@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import { AppBar, Toolbar, Typography, Tabs, Tab, Box, IconButton, Drawer, List, ListItemButton, ListItemText, Divider, Tooltip, Button, useMediaQuery, Menu, MenuItem } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -20,15 +20,33 @@ const TAB_LABELS = {
 };
 
 export default function NavBar({ active, onChange }) {
-  const { currentUser, logout, updateProfile } = useAuth();
+  const { logout } = useAuth();
   const { settings, toggleMode, setPrimary, coreColors } = useThemeSettings();
-  const [anchor,setAnchor] = useState(null);
-  const tabs = Object.keys(TAB_LABELS);
-  const [open,setOpen] = useState(false);
+  const [anchor, setAnchor] = useState(null);
+  const [userData, setUserData] = useState(null);
+  const [open, setOpen] = useState(false);
   const isSmall = useMediaQuery('(max-width:900px)');
+  const tabs = Object.keys(TAB_LABELS);
   const activeIndex = tabs.indexOf(active);
 
   const handleTab = (_e, idx) => { if(idx > -1) onChange(tabs[idx]); };
+
+  // Fetch user data from API
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = JSON.parse(localStorage.getItem('user')); 
+        const res = await fetch(`http://localhost:5044/api/Dashboard/user/${user.id}`);
+        if (!res.ok) throw new Error('Failed to fetch user');
+        const data = await res.json();
+        setUserData(data);
+      } catch (err) {
+        console.error(err);
+      }
+    };
+    fetchUser();
+  }, []);
+
   const drawer = (
     <Box sx={{width:250, p:2}} role="presentation" onClick={()=>setOpen(false)}>
       <Typography variant="h6" sx={{display:'flex',alignItems:'center',gap:1, mb:1}}><SchoolIcon fontSize="small"/> SkillShare</Typography>
@@ -40,9 +58,11 @@ export default function NavBar({ active, onChange }) {
           </ListItemButton>
         ))}
       </List>
-      {currentUser && <>
+      {userData && <>
         <Divider sx={{my:1}} />
-        <Typography variant="caption" color="text.secondary">{currentUser.name}<br/>Points: {currentUser.points}</Typography>
+        <Typography variant="caption" color="text.secondary">
+          {userData.username}<br/>Points: {userData.points}
+        </Typography>
         <Button startIcon={<LogoutIcon />} variant="outlined" size="small" sx={{mt:1}} onClick={logout}>Logout</Button>
       </>}
     </Box>
@@ -64,7 +84,7 @@ export default function NavBar({ active, onChange }) {
             </Tabs>
           )}
           <Box sx={{flexGrow:1}} />
-          {currentUser && !isSmall && (
+          {userData && !isSmall && (
             <Box sx={{display:'flex',alignItems:'center',gap:1.5}}>
               <Tooltip title="Theme settings">
                 <IconButton size="small" color="inherit" onClick={(e)=>setAnchor(e.currentTarget)} aria-label="theme">
@@ -77,14 +97,16 @@ export default function NavBar({ active, onChange }) {
                 </IconButton>
               </Tooltip>
               <Tooltip title="Current points">
-                <Typography variant="body2" sx={{fontSize:'.8rem',opacity:.8}}>{currentUser.name} · {currentUser.points} pts</Typography>
+                <Typography variant="body2" sx={{fontSize:'.8rem',opacity:.8}}>
+                  {userData.username} · {userData.points} pts
+                </Typography>
               </Tooltip>
               <IconButton size="small" color="inherit" onClick={logout} aria-label="logout">
                 <LogoutIcon fontSize="small" />
               </IconButton>
             </Box>
           )}
-          {currentUser && isSmall && (
+          {userData && isSmall && (
             <Box sx={{display:'flex',alignItems:'center',gap:1}}>
               <IconButton size="small" color="inherit" onClick={toggleMode} aria-label="mode">
                 {settings.mode==='dark' ? <LightModeIcon fontSize="small" /> : <DarkModeIcon fontSize="small" />}
@@ -115,4 +137,3 @@ export default function NavBar({ active, onChange }) {
     </>
   );
 }
-

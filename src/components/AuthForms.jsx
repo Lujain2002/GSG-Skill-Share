@@ -84,7 +84,7 @@ export function RegisterForm({ compact }) {
     if (disabled) return;
 
     try {
-      await register(name,email,password); // ← استدعاء API
+      await register(name,email,password);
     } catch(err) {
       setError(err.message);
     }

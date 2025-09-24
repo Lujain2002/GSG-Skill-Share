@@ -23,29 +23,39 @@ namespace SkillShare.Controllers
         [HttpGet("matches/by-category/{categoryId}")]
         public async Task<IActionResult> GetMatchesByCategory(int categoryId)
         {
-            var result = await dbContext.Users
+            var currentUserId = userManager.GetUserId(User); 
+
+            var query = dbContext.Users
                 .Include(u => u.UserSkills)
                     .ThenInclude(us => us.Skill)
-                .Where(u => u.UserSkills.Any(us =>
+                .Where(u => u.Id != currentUserId);
+
+            if (categoryId != 0)
+            {
+                query = query.Where(u => u.UserSkills.Any(us =>
                     us.Type == SkillType.CanTeach &&
-                    us.Skill.CategoryId == categoryId))
-                .Select(u => new
-                {
+                    us.Skill.CategoryId == categoryId));
+            }
+
+            var result = await query
+                .Select(u => new {
                     u.Id,
                     u.UserName,
                     u.AvatarUrl,
-                    Score = u.Points, 
+                    Score = u.Points,
                     Teaches = u.UserSkills
                                 .Where(us => us.Type == SkillType.CanTeach &&
-                                             us.Skill.CategoryId == categoryId)
+                                            (categoryId == 0 || us.Skill.CategoryId == categoryId))
                                 .Select(us => new {
                                     Skill = us.Skill.Name,
+                                    SkillId=us.SkillId,
                                     Level = us.Level.ToString()
                                 }),
                     Wants = u.UserSkills
                                 .Where(us => us.Type == SkillType.WantToLearn)
                                 .Select(us => new {
                                     Skill = us.Skill.Name,
+                                     SkillId = us.SkillId,
                                     Category = us.Skill.Category.Name
                                 })
                 })
@@ -53,6 +63,8 @@ namespace SkillShare.Controllers
 
             return Ok(result);
         }
+
+
 
     }
 }
