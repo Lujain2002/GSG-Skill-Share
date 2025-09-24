@@ -156,12 +156,14 @@ export function AuthProvider({ children }) {
 
     // Mirror backend anti-abuse rules locally
     const now = new Date();
-    const dayWindow = new Date(now.getTime() - 24*60*60*1000);
-    const weekWindow = new Date(now.getTime() - 7*24*60*60*1000);
+  const dayWindow = new Date(now.getTime() - 24*60*60*1000);
+  const weekWindow = new Date(now.getTime() - 7*24*60*60*1000);
+  const monthWindow = new Date(now.getTime() - 30*24*60*60*1000);
     const MAX_CONCURRENT_SCHEDULED_PER_PAIR = 1;
     const MAX_DAILY_SESSIONS_PER_PAIR = 2;
     const MAX_WEEKLY_SESSIONS_PER_PAIR = 5;
-    const COOLDOWN_DAYS_AFTER_MUTUAL_EXCHANGE = 14;
+  const COOLDOWN_DAYS_AFTER_MUTUAL_EXCHANGE = 14;
+  const MAX_MONTHLY_SESSIONS_PER_PAIR = 10;
     const ALLOW_NEW_UNTAUGHT_SKILL_DURING_COOLDOWN = true;
 
     const pairSessions = sessions.filter(s =>
@@ -208,6 +210,10 @@ export function AuthProvider({ children }) {
     const weeklyCount = pairSessions.filter(s => new Date(s.createdAt || s.scheduledAt || now) >= weekWindow).length;
     if (weeklyCount >= MAX_WEEKLY_SESSIONS_PER_PAIR)
       throw new Error('Pair limit reached: max 5 sessions per 7 days.');
+
+    const monthlyCount = pairSessions.filter(s => new Date(s.createdAt || s.scheduledAt || now) >= monthWindow).length;
+    if (monthlyCount >= MAX_MONTHLY_SESSIONS_PER_PAIR)
+      throw new Error('Pair limit reached: max 10 sessions per 30 days.');
 
     const session = {
       id: uuid(),

@@ -10,6 +10,7 @@ import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import PersonIcon from '@mui/icons-material/Person';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
 import UserProfileModal from './UserProfileModal';
+import BookSessionModal from './BookSessionModal';
 
 const COOLDOWN_DAYS = 14;
 
@@ -20,6 +21,7 @@ export default function Matches({ onBook }) {
   const [q, setQ] = useState('');
   const [sort, setSort] = useState('score'); // score | name
   const [viewUser, setViewUser] = useState(null);
+  const [bookUser, setBookUser] = useState(null);
 
   const matchesRaw = getMatches(currentUser, users) || [];
 
@@ -159,6 +161,39 @@ export default function Matches({ onBook }) {
           const teaches = m.user.canTeach || [];
           const wants = m.user.wantLearn || [];
 
+          // Availability logic for booking
+          const isSelf = currentUser?.id === m.user.id;
+          const pair = (sessions || []).filter(s =>
+            (s.teacherId === m.user.id && s.learnerId === currentUser?.id) ||
+            (s.teacherId === currentUser?.id && s.learnerId === m.user.id)
+          );
+          const hasScheduled = pair.some(s => s.status === 'scheduled');
+          const now = new Date();
+          const dayWindow = new Date(now.getTime() - 24*60*60*1000);
+          const weekWindow = new Date(now.getTime() - 7*24*60*60*1000);
+          const monthWindow = new Date(now.getTime() - 30*24*60*60*1000);
+          const daily = pair.filter(s => new Date(s.createdAt || s.scheduledAt || now) >= dayWindow).length;
+          const weekly = pair.filter(s => new Date(s.createdAt || s.scheduledAt || now) >= weekWindow).length;
+          const monthly = pair.filter(s => new Date(s.createdAt || s.scheduledAt || now) >= monthWindow).length;
+          const cooldownDaysLeft = exchanged ? daysLeft : 0;
+          let disabled = false;
+          let label = 'Book Session';
+          if (isSelf) { disabled = true; label = 'This is you'; }
+          else if ((currentUser?.points ?? 0) < 5) { disabled = true; label = 'Insufficient points'; }
+          else if (hasScheduled) { disabled = true; label = 'Already scheduled'; }
+          else if (daily >= 2) { disabled = true; label = 'Daily limit reached'; }
+          else if (weekly >= 5) { disabled = true; label = 'Weekly limit reached'; }
+          else if (monthly >= 10) { disabled = true; label = 'Monthly limit reached'; }
+          else if (cooldownDaysLeft > 0) {
+            const taughtSet = new Set(
+              pair
+                .filter(s => s.status === 'completed' && s.teacherId === m.user.id && s.learnerId === currentUser?.id && s.skill)
+                .map(s => String(s.skill).toLowerCase())
+            );
+            const availableNew = (teaches || []).some(s => !taughtSet.has(String(s.skill || '').toLowerCase()));
+            if (!availableNew) { disabled = true; label = `Cooldown active (${cooldownDaysLeft}d)`; }
+          }
+
           return (
             <div key={m.user.id} className={`card match-card ${exchanged ? 'exchanged' : ''}`} style={{position:'relative'}}>
               <Box sx={{display:'flex', alignItems:'center', gap:1}}>
@@ -205,9 +240,13 @@ export default function Matches({ onBook }) {
               )}
 
               <Box sx={{display:'flex', gap:.75, mt:.75}}>
-                <Button size="small" variant="contained" startIcon={<BookOnlineIcon />} onClick={()=>onBook && onBook(m.user)} disabled={exchanged && hideExchanged}>
-                  Book Session
-                </Button>
+                <Tooltip title={disabled && label !== 'Book Session' ? label : ''} arrow disableInteractive>
+                  <span>
+                    <Button size="small" variant="contained" startIcon={<BookOnlineIcon />} onClick={()=> setBookUser(m.user)} disabled={disabled}>
+                      {label}
+                    </Button>
+                  </span>
+                </Tooltip>
                 <Button size="small" variant="text" onClick={()=>setViewUser(m.user)}>View Profile</Button>
               </Box>
             </div>
@@ -215,6 +254,9 @@ export default function Matches({ onBook }) {
         })}
       </div>
       <UserProfileModal user={viewUser} onClose={()=>setViewUser(null)} />
+      {bookUser && (
+        <BookSessionModal teacher={bookUser} onClose={()=>setBookUser(null)} />
+      )}
     </div>
   );
 }
