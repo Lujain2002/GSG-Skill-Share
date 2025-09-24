@@ -10,14 +10,26 @@ import {
   Stack,
   Chip,
   Typography,
-  Box
+  Box,
+  ToggleButtonGroup,
+  ToggleButton,
+  Snackbar,
+  Alert,
+  InputAdornment,
+  Tooltip
 } from '@mui/material';
 import { validateSkill } from '../utils/validation';
+import SchoolIcon from '@mui/icons-material/School';
+import MenuBookIcon from '@mui/icons-material/MenuBook';
+import CategoryIcon from '@mui/icons-material/Category';
+import StarBorderIcon from '@mui/icons-material/StarBorder';
+import AddIcon from '@mui/icons-material/Add';
+import SaveIcon from '@mui/icons-material/Save';
 
 const API_BASE = 'http://localhost:5044';
 const LEVELS = ['Beginner', 'Intermediate', 'Advanced']; // enum : 0,1,2
 
-function SkillList({ title, list, onRemove }) {
+function SkillList({ title, list, onRemove, categories }) {
   return (
     <Box sx={{ mb: 2 }}>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>{title}</Typography>
@@ -27,7 +39,7 @@ function SkillList({ title, list, onRemove }) {
         {list.map(s => (
           <Chip
             key={s.id || s.skill + s.level}
-            label={`${s.skill}${s.level ? ' · ' + s.level : ''}`}
+            label={`${s.skill}${s.level ? ' · ' + s.level : ''}${s.categoryId ? ' · ' + (categories.find(c=>String(c.categoryId)===String(s.categoryId))?.name || '') : ''}`}
             onDelete={() => onRemove(s)}
             size="small"
             color={title.includes('Teach') ? 'primary' : 'default'}
@@ -49,6 +61,8 @@ export default function SkillEditor() {
   const [mode, setMode] = useState('teach');
   const [categoryId, setCategoryId] = useState('');
   const [skillError, setSkillError] = useState('');
+  const [saving, setSaving] = useState(false);
+  const [savedOpen, setSavedOpen] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/Categories/`)
@@ -120,6 +134,7 @@ export default function SkillEditor() {
   };
 
   const save = async () => {
+    setSaving(true);
     const newSkills = [...teach.map(s => ({ ...s, type: 0 })),
                        ...learn.map(s => ({ ...s, type: 1 }))];
     // Merge client-side duplicates before sending
@@ -164,21 +179,30 @@ export default function SkillEditor() {
       });
       setTeach(teachList);
       setLearn(learnList);
+      setSavedOpen(true);
     } catch {}
+    finally {
+      setSaving(false);
+    }
   };
 
   return (
     <div className="card" style={{ padding: '1.25rem 1.25rem 1.5rem' }}>
-      <Typography variant="h6" sx={{ mb: 1 }}>Skills</Typography>
-      <Stack direction="row" spacing={1} sx={{ mb: 2 }}>
-        <Button size="small" variant={mode === 'teach' ? 'contained' : 'outlined'}
-                onClick={() => setMode('teach')}>Teach</Button>
-        <Button size="small" variant={mode === 'learn' ? 'contained' : 'outlined'}
-                onClick={() => setMode('learn')}>Learn</Button>
-      </Stack>
+      <Box sx={{display:'flex', alignItems:'center', justifyContent:'space-between', mb: 2}}>
+        <Typography variant="h6" sx={{ display:'flex', alignItems:'center', gap:1 }}>
+          Skills
+          <Typography component="span" variant="caption" color="text.secondary" sx={{ml:1}}>
+            Teach: {teach.length} · Learn: {learn.length}
+          </Typography>
+        </Typography>
+        <ToggleButtonGroup size="small" value={mode} exclusive onChange={(_e,v)=>{ if(v) setMode(v); }}>
+          <ToggleButton value="teach" aria-label="Teach"><SchoolIcon fontSize="small"/> Teach</ToggleButton>
+          <ToggleButton value="learn" aria-label="Learn"><MenuBookIcon fontSize="small"/> Learn</ToggleButton>
+        </ToggleButtonGroup>
+      </Box>
 
-      <Box component="form" onSubmit={e => { e.preventDefault(); add(); }}
-           sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.2, mb: 2 }}>
+   <Box id="skills-form" component="form" onSubmit={e => { e.preventDefault(); add(); }}
+     sx={{ display: 'flex', flexWrap: 'wrap', gap: 1.2, mb: 2 }}>
         <TextField
           size="small"
           label={mode === 'teach' ? 'Skill you can teach' : 'Skill you want to learn'}
@@ -186,7 +210,14 @@ export default function SkillEditor() {
           onChange={e => setSkill(e.target.value)}
           error={!!skillError}
           helperText={skillError || ' '}
-          sx={{ flex: '1 1 180px' }}
+          sx={{ flex: '1 1 240px' }}
+          InputProps={{
+            startAdornment: (
+              <InputAdornment position="start">
+                {mode === 'teach' ? <SchoolIcon fontSize="small"/> : <MenuBookIcon fontSize="small"/>}
+              </InputAdornment>
+            )
+          }}
         />
 
         <FormControl size="small" sx={{ minWidth: 170 }}>
@@ -215,18 +246,35 @@ export default function SkillEditor() {
           </FormControl>
         )}
 
-        <Button type="submit" variant="contained" size="small">Add</Button>
-        <Button type="button" variant="outlined" size="small" onClick={save}>Save</Button>
+        {/* Actions moved to footer bar below */}
       </Box>
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} useFlexGap>
         <Box sx={{ flex: 1 }}>
-          <SkillList title="Can Teach" list={teach} onRemove={removeTeach} />
+          <SkillList title="Can Teach" list={teach} onRemove={removeTeach} categories={categories} />
         </Box>
         <Box sx={{ flex: 1 }}>
-          <SkillList title="Want to Learn" list={learn} onRemove={removeLearn} />
+          <SkillList title="Want to Learn" list={learn} onRemove={removeLearn} categories={categories} />
         </Box>
       </Stack>
+
+      {/* Footer actions */}
+      <Box sx={{ display:'flex', justifyContent:'flex-end', gap:1, mt:2, pt:1, borderTop:'1px solid #232b36' }}>
+        <Tooltip title="Add to list">
+          <Button form="skills-form" type="submit" variant="contained" size="small" startIcon={<AddIcon />}>Add</Button>
+        </Tooltip>
+        <Tooltip title="Save changes to your skills">
+          <Button type="button" color="success" variant="contained" size="small" startIcon={<SaveIcon />} onClick={save} disabled={saving}>
+            {saving ? 'Saving…' : 'Save changes'}
+          </Button>
+        </Tooltip>
+      </Box>
+
+      <Snackbar open={savedOpen} autoHideDuration={2000} onClose={() => setSavedOpen(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
+        <Alert severity="success" variant="filled" sx={{ width: '100%' }} onClose={() => setSavedOpen(false)}>
+          Skills saved
+        </Alert>
+      </Snackbar>
     </div>
   );
 }
