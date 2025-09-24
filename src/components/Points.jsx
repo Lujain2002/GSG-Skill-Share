@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Points() {
-  const { currentUser, ledger, constants } = useAuth();
+  const { currentUser, ledger, constants, refreshPoints } = useAuth();
+  useEffect(() => { refreshPoints && refreshPoints(); }, []);
   return (
     <div className="card">
       <h3>Points & Ledger</h3>

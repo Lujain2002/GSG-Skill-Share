@@ -9,6 +9,7 @@ import SortIcon from '@mui/icons-material/Sort';
 import BookOnlineIcon from '@mui/icons-material/BookOnline';
 import PersonIcon from '@mui/icons-material/Person';
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import UserProfileModal from './UserProfileModal';
 
 const COOLDOWN_DAYS = 14;
 
@@ -18,6 +19,7 @@ export default function Matches({ onBook }) {
   const [hideExchanged, setHideExchanged] = useState(true);
   const [q, setQ] = useState('');
   const [sort, setSort] = useState('score'); // score | name
+  const [viewUser, setViewUser] = useState(null);
 
   const matchesRaw = getMatches(currentUser, users) || [];
 
@@ -206,12 +208,13 @@ export default function Matches({ onBook }) {
                 <Button size="small" variant="contained" startIcon={<BookOnlineIcon />} onClick={()=>onBook && onBook(m.user)} disabled={exchanged && hideExchanged}>
                   Book Session
                 </Button>
-                <Button size="small" variant="text" onClick={()=>window.dispatchEvent(new CustomEvent('navigateTab', { detail: { tab: 'profile' } }))}>View Profile</Button>
+                <Button size="small" variant="text" onClick={()=>setViewUser(m.user)}>View Profile</Button>
               </Box>
             </div>
           );
         })}
       </div>
+      <UserProfileModal user={viewUser} onClose={()=>setViewUser(null)} />
     </div>
   );
 }

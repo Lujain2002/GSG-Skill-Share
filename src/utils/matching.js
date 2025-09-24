@@ -21,9 +21,11 @@ export function computeMatchScore(current, other) {
 
 export function getMatches(current, users = []) {
   if (!current || !Array.isArray(users)) return [];
+  // Prefer enriched current user from the users directory (includes skills) if available
+  const currentEnriched = users.find(u => u && u.id === current.id) || current;
   return users
-    .filter(u => u && u.id !== current.id)
-    .map(u => ({ user: u, score: computeMatchScore(current, u) }))
+    .filter(u => u && u.id !== currentEnriched.id)
+    .map(u => ({ user: u, score: computeMatchScore(currentEnriched, u) }))
     .filter(m => m.score > 0)
-    .sort((a,b) => b.score - a.score);
+    .sort((a, b) => b.score - a.score);
 }

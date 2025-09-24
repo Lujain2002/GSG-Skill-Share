@@ -16,7 +16,8 @@ import {
   Snackbar,
   Alert,
   InputAdornment,
-  Tooltip
+  Tooltip,
+  FormHelperText
 } from '@mui/material';
 import { validateSkill } from '../utils/validation';
 import SchoolIcon from '@mui/icons-material/School';
@@ -61,6 +62,7 @@ export default function SkillEditor() {
   const [mode, setMode] = useState('teach');
   const [categoryId, setCategoryId] = useState('');
   const [skillError, setSkillError] = useState('');
+  const [categoryError, setCategoryError] = useState('');
   const [saving, setSaving] = useState(false);
   const [savedOpen, setSavedOpen] = useState(false);
 
@@ -101,26 +103,40 @@ export default function SkillEditor() {
   }, [currentUser]);
 
   const add = () => {
-    const err = validateSkill(skill.trim());
+    const trimmed = skill.trim();
+    const err = validateSkill(trimmed);
     setSkillError(err);
-    if (err || !categoryId) return;
+    if (err) return;
+    if (!categoryId) {
+      setCategoryError('Category required');
+      return;
+    }
 
     const entry = {
-      skill: skill.trim(),
+      skill: trimmed,
       level: mode === 'teach' ? level : 'Any',
       categoryId
     };
 
     if (mode === 'teach') {
-      const exists = teach.some(s => s.skill.toLowerCase() === entry.skill.toLowerCase() && String(s.categoryId) === String(entry.categoryId));
-      if (!exists) setTeach([...teach, entry]);
+      const exists = teach.some(s => s.skill.trim().toLowerCase() === entry.skill.toLowerCase() && String(s.categoryId) === String(entry.categoryId));
+      if (exists) {
+        setSkillError('Already added to Teach in this category');
+        return;
+      }
+      setTeach([...teach, entry]);
     } else {
-      const exists = learn.some(s => s.skill.toLowerCase() === entry.skill.toLowerCase() && String(s.categoryId) === String(entry.categoryId));
-      if (!exists) setLearn([...learn, entry]);
+      const exists = learn.some(s => s.skill.trim().toLowerCase() === entry.skill.toLowerCase() && String(s.categoryId) === String(entry.categoryId));
+      if (exists) {
+        setSkillError('Already added to Learn in this category');
+        return;
+      }
+      setLearn([...learn, entry]);
     }
 
     setSkill('');
     setSkillError('');
+    setCategoryError('');
   };
 
   const removeTeach = (s) => {
@@ -207,7 +223,11 @@ export default function SkillEditor() {
           size="small"
           label={mode === 'teach' ? 'Skill you can teach' : 'Skill you want to learn'}
           value={skill}
-          onChange={e => setSkill(e.target.value)}
+          onChange={e => {
+            const v = e.target.value;
+            setSkill(v);
+            setSkillError(validateSkill(v.trim()));
+          }}
           error={!!skillError}
           helperText={skillError || ' '}
           sx={{ flex: '1 1 240px' }}
@@ -220,17 +240,18 @@ export default function SkillEditor() {
           }}
         />
 
-        <FormControl size="small" sx={{ minWidth: 170 }}>
+        <FormControl size="small" sx={{ minWidth: 170 }} error={!!categoryError}>
           <InputLabel>Category</InputLabel>
           <Select
             value={categoryId}
             label="Category"
-            onChange={e => setCategoryId(e.target.value)}
+            onChange={e => { setCategoryId(e.target.value); setCategoryError(''); }}
           >
             {categories.map(c => (
               <MenuItem key={c.categoryId} value={c.categoryId}>{c.name}</MenuItem>
             ))}
           </Select>
+          {categoryError && <FormHelperText>{categoryError}</FormHelperText>}
         </FormControl>
 
         {mode === 'teach' && (
@@ -261,7 +282,9 @@ export default function SkillEditor() {
       {/* Footer actions */}
       <Box sx={{ display:'flex', justifyContent:'flex-end', gap:1, mt:2, pt:1, borderTop:'1px solid #232b36' }}>
         <Tooltip title="Add to list">
-          <Button form="skills-form" type="submit" variant="contained" size="small" startIcon={<AddIcon />}>Add</Button>
+          <span>
+            <Button form="skills-form" type="submit" variant="contained" size="small" startIcon={<AddIcon />} disabled={!!skillError || !skill.trim() || !categoryId}>Add</Button>
+          </span>
         </Tooltip>
         <Tooltip title="Save changes to your skills">
           <Button type="button" color="success" variant="contained" size="small" startIcon={<SaveIcon />} onClick={save} disabled={saving}>

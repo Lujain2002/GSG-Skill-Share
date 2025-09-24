@@ -8,6 +8,7 @@ const AuthContext = createContext(null);
 const START_POINTS = 10;
 const EARN_RATE_PER_30 = 5;
 const API_URL = 'http://localhost:5044/api/Accounts';
+const API_BASE = 'http://localhost:5044';
 
 export function AuthProvider({ children }) {
   const themeCtx = useThemeSettings();
@@ -37,6 +38,26 @@ export function AuthProvider({ children }) {
     setCurrentUser(u => ({ ...u, points: (u.points || 0) + delta }));
   };
 
+  // Fetch current points for the logged-in user from backend
+  const refreshPoints = async () => {
+    try {
+      const userId = currentUser?.id || JSON.parse(localStorage.getItem('user'))?.id;
+      if (!userId) return;
+      const res = await fetch(`${API_BASE}/api/Dashboard/user/${userId}`);
+      if (!res.ok) throw new Error('Failed to fetch points');
+      const data = await res.json();
+      const points = typeof data.points === 'number' ? data.points : currentUser?.points;
+      if (typeof points === 'number') {
+        setCurrentUser(prev => prev ? { ...prev, points } : prev);
+        const cached = JSON.parse(localStorage.getItem('user')) || {};
+        localStorage.setItem('user', JSON.stringify({ ...cached, points }));
+      }
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('refreshPoints failed', e);
+    }
+  };
+
   // ----------------- Users (directory) -----------------
   const fetchUsers = async () => {
     try {
@@ -48,6 +69,22 @@ export function AuthProvider({ children }) {
       // eslint-disable-next-line no-console
       console.error('Users fetch failed:', e.message);
       setUsers([]);
+    }
+  };
+
+  // Fetch the full profile for the current user (including skills) and merge into state/localStorage
+  const hydrateCurrentUserDetails = async (id) => {
+    try {
+      if (!id) return;
+      const res = await fetch(`${API_BASE}/api/Users/${id}`);
+      if (!res.ok) return;
+      const profile = await res.json();
+      setCurrentUser(prev => prev ? { ...prev, ...profile } : profile);
+      const cached = JSON.parse(localStorage.getItem('user')) || {};
+      localStorage.setItem('user', JSON.stringify({ ...cached, ...profile }));
+    } catch (e) {
+      // eslint-disable-next-line no-console
+      console.error('hydrateCurrentUserDetails failed', e);
     }
   };
 
@@ -78,9 +115,12 @@ export function AuthProvider({ children }) {
     if (data.token) localStorage.setItem('token', data.token);
     if (data.user) localStorage.setItem('user', JSON.stringify(data.user));
 
-    if (data.user) setCurrentUser(data.user);
-    // hydrate users directory after login so UI can resolve names
-    fetchUsers();
+  if (data.user) setCurrentUser(data.user);
+  // hydrate users directory and current user's skills after login so matching works
+  fetchUsers();
+  hydrateCurrentUserDetails(data.user?.id);
+  // refresh points from backend after login
+  try { await refreshPoints(); } catch {}
   };
 
   const logout = () => {
@@ -100,6 +140,10 @@ export function AuthProvider({ children }) {
       if (cached && cached.id) {
         setCurrentUser(cached);
         fetchUsers();
+        // also fetch full profile to ensure skills are present
+        hydrateCurrentUserDetails(cached.id);
+        // best-effort refresh
+        setTimeout(() => { refreshPoints(); }, 0);
       }
     } catch {}
   }, []);
@@ -215,6 +259,7 @@ export function AuthProvider({ children }) {
     ledger,
     addLedger,
     adjustPoints,
+    refreshPoints,
     constants: { START_POINTS, EARN_RATE_PER_30 }
   };
 
