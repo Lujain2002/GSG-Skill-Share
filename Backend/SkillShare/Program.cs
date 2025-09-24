@@ -18,7 +18,8 @@ namespace SkillShare
             // Add services to the container.
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
-                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+                // Use SQLite for local development
+                options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
 
             builder.Services.AddIdentity<AppUser, IdentityRole>()
@@ -36,7 +37,7 @@ options.TokenValidationParameters = new TokenValidationParameters
  ValidIssuer = builder.Configuration["JWT:Issuer"],
  ValidAudience = builder.Configuration["JWT:Audience"],
  IssuerSigningKey = new SymmetricSecurityKey(
-     Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"])
+     Encoding.UTF8.GetBytes(builder.Configuration["JWT:Key"] ?? string.Empty)
  )
 };
 });
@@ -57,6 +58,29 @@ options.TokenValidationParameters = new TokenValidationParameters
 
             var app = builder.Build();
 
+            // Ensure database is created and migrations are applied
+            using (var scope = app.Services.CreateScope())
+            {
+                var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+                try
+                {
+                    var pending = db.Database.GetPendingMigrations();
+                    if (pending.Any())
+                    {
+                        db.Database.Migrate();
+                    }
+                    else
+                    {
+                        db.Database.EnsureCreated();
+                    }
+                }
+                catch
+                {
+                    // As a safe fallback for demo: ensure DB exists
+                    db.Database.EnsureCreated();
+                }
+            }
+
            
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
@@ -68,6 +92,7 @@ options.TokenValidationParameters = new TokenValidationParameters
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
 

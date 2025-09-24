@@ -66,7 +66,7 @@ export default function SkillEditor() {
         const learnList = [];
         data.forEach(d => {
           const entry = {
-            id: d.id,
+            id: d.userSkillId || d.id,
             skill: d.skillName,
             level: LEVELS[d.level] || 'Any',
             categoryId: d.categoryId
@@ -74,8 +74,14 @@ export default function SkillEditor() {
           if (d.type === 0) teachList.push(entry);
           else learnList.push(entry);
         });
-        setTeach(teachList);
-        setLearn(learnList);
+        // Deduplicate by (skill + categoryId + type)
+        const key = (x, t) => `${(x.skill||'').toLowerCase()}|${x.categoryId}|${t}`;
+        const tMap = new Map();
+        teachList.forEach(x => { const k = key(x, 0); if (!tMap.has(k)) tMap.set(k, x); });
+        const lMap = new Map();
+        learnList.forEach(x => { const k = key(x, 1); if (!lMap.has(k)) lMap.set(k, x); });
+        setTeach(Array.from(tMap.values()));
+        setLearn(Array.from(lMap.values()));
       })
       .catch(console.error);
   }, [currentUser]);
@@ -92,11 +98,11 @@ export default function SkillEditor() {
     };
 
     if (mode === 'teach') {
-      if (!teach.some(s => s.skill.toLowerCase() === entry.skill.toLowerCase()))
-        setTeach([...teach, entry]);
+      const exists = teach.some(s => s.skill.toLowerCase() === entry.skill.toLowerCase() && String(s.categoryId) === String(entry.categoryId));
+      if (!exists) setTeach([...teach, entry]);
     } else {
-      if (!learn.some(s => s.skill.toLowerCase() === entry.skill.toLowerCase()))
-        setLearn([...learn, entry]);
+      const exists = learn.some(s => s.skill.toLowerCase() === entry.skill.toLowerCase() && String(s.categoryId) === String(entry.categoryId));
+      if (!exists) setLearn([...learn, entry]);
     }
 
     setSkill('');
@@ -116,10 +122,15 @@ export default function SkillEditor() {
   const save = async () => {
     const newSkills = [...teach.map(s => ({ ...s, type: 0 })),
                        ...learn.map(s => ({ ...s, type: 1 }))];
+    // Merge client-side duplicates before sending
+    const norm = (x) => `${x.skill.trim().toLowerCase()}|${x.categoryId}|${x.type}`;
+    const merged = new Map();
+    for (const s of newSkills) { if (s.skill) merged.set(norm(s), s); }
+    const uniqueList = Array.from(merged.values());
 
-    for (const s of newSkills) {
+    for (const s of uniqueList) {
       if (!s.id) {
-        await fetch(`${API_BASE}/api/UserSkills/`, {
+        const res = await fetch(`${API_BASE}/api/UserSkills/`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
@@ -130,8 +141,30 @@ export default function SkillEditor() {
             level: s.type === 0 ? LEVELS.indexOf(s.level) : 0
           })
         });
+        if (!res.ok) {
+          // eslint-disable-next-line no-console
+          console.error('Failed to add skill', s);
+        }
       }
     }
+    // Refetch to capture server IDs and avoid local duplication
+    try {
+      const r = await fetch(`${API_BASE}/api/UserSkills/${currentUser.id}`);
+      const data = await r.json();
+      const teachList = [];
+      const learnList = [];
+      data.forEach(d => {
+        const entry = {
+          id: d.userSkillId || d.id,
+          skill: d.skillName,
+          level: LEVELS[d.level] || 'Any',
+          categoryId: d.categoryId
+        };
+        if (d.type === 0) teachList.push(entry); else learnList.push(entry);
+      });
+      setTeach(teachList);
+      setLearn(learnList);
+    } catch {}
   };
 
   return (

@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "sD0tYhrtzzDKud4kq2NiBE7zSP8yCIVOZnMeAeMwRn0=",
+  "Hash": "8pY0KyYPspJzJpbsUqqtoFy2OqvfWmdAi2zivCd3Q98=",
   "Source": "SkillShare",
   "BasePath": "_content/SkillShare",
   "Mode": "Default",
@@ -10,30 +10,219 @@
     {
       "Name": "SkillShare\\wwwroot",
       "Source": "SkillShare",
-      "ContentRoot": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\",
       "BasePath": "_content/SkillShare",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "Identity": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\382d42e3-7060-48b5-afc7-e7adc2876d56.jfif",
       "SourceId": "SkillShare",
       "SourceType": "Discovered",
-      "ContentRoot": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\",
+      "ContentRoot": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\",
       "BasePath": "_content/SkillShare",
-      "RelativePath": "AvatarImages/0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
+      "RelativePath": "AvatarImages/382d42e3-7060-48b5-afc7-e7adc2876d56#[.{fingerprint}]?.jfif",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
-      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeBehavior": "",
       "AssetMergeSource": "",
       "RelatedAsset": "",
       "AssetTraitName": "",
       "AssetTraitValue": "",
+      "Fingerprint": "4jqbc3osrl",
+      "Integrity": "8KzclzVLwCSX2T0jOkKpM3ul1Xyugqzh1WaLBCWZd38=",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png"
+      "OriginalItemSpec": "wwwroot\\AvatarImages\\382d42e3-7060-48b5-afc7-e7adc2876d56.jfif"
+    },
+    {
+      "Identity": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg",
+      "SourceId": "SkillShare",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\",
+      "BasePath": "_content/SkillShare",
+      "RelativePath": "AvatarImages/49142b88-fe25-4661-b506-fdba1320fff0#[.{fingerprint}]?.jpg",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "Fingerprint": "7yn9df04j8",
+      "Integrity": "f6oflYVl+QMcRu2McX3tJjbLjSTdg6L9H9PrOm2nET0=",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg"
+    }
+  ],
+  "Endpoints": [
+    {
+      "Route": "AvatarImages/382d42e3-7060-48b5-afc7-e7adc2876d56.4jqbc3osrl.jfif",
+      "AssetFile": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\382d42e3-7060-48b5-afc7-e7adc2876d56.jfif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "156182"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/pjpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"8KzclzVLwCSX2T0jOkKpM3ul1Xyugqzh1WaLBCWZd38=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 23 Sep 2025 17:53:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "4jqbc3osrl"
+        },
+        {
+          "Name": "label",
+          "Value": "AvatarImages/382d42e3-7060-48b5-afc7-e7adc2876d56.jfif"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-8KzclzVLwCSX2T0jOkKpM3ul1Xyugqzh1WaLBCWZd38="
+        }
+      ]
+    },
+    {
+      "Route": "AvatarImages/382d42e3-7060-48b5-afc7-e7adc2876d56.jfif",
+      "AssetFile": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\382d42e3-7060-48b5-afc7-e7adc2876d56.jfif",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "156182"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/pjpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"8KzclzVLwCSX2T0jOkKpM3ul1Xyugqzh1WaLBCWZd38=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Tue, 23 Sep 2025 17:53:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-8KzclzVLwCSX2T0jOkKpM3ul1Xyugqzh1WaLBCWZd38="
+        }
+      ]
+    },
+    {
+      "Route": "AvatarImages/49142b88-fe25-4661-b506-fdba1320fff0.7yn9df04j8.jpg",
+      "AssetFile": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1282519"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"f6oflYVl+QMcRu2McX3tJjbLjSTdg6L9H9PrOm2nET0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 22 Sep 2025 17:01:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=31536000, immutable"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "fingerprint",
+          "Value": "7yn9df04j8"
+        },
+        {
+          "Name": "label",
+          "Value": "AvatarImages/49142b88-fe25-4661-b506-fdba1320fff0.jpg"
+        },
+        {
+          "Name": "integrity",
+          "Value": "sha256-f6oflYVl+QMcRu2McX3tJjbLjSTdg6L9H9PrOm2nET0="
+        }
+      ]
+    },
+    {
+      "Route": "AvatarImages/49142b88-fe25-4661-b506-fdba1320fff0.jpg",
+      "AssetFile": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg",
+      "Selectors": [],
+      "ResponseHeaders": [
+        {
+          "Name": "Accept-Ranges",
+          "Value": "bytes"
+        },
+        {
+          "Name": "Content-Length",
+          "Value": "1282519"
+        },
+        {
+          "Name": "Content-Type",
+          "Value": "image/jpeg"
+        },
+        {
+          "Name": "ETag",
+          "Value": "\"f6oflYVl+QMcRu2McX3tJjbLjSTdg6L9H9PrOm2nET0=\""
+        },
+        {
+          "Name": "Last-Modified",
+          "Value": "Mon, 22 Sep 2025 17:01:54 GMT"
+        },
+        {
+          "Name": "Cache-Control",
+          "Value": "max-age=3600, must-revalidate"
+        }
+      ],
+      "EndpointProperties": [
+        {
+          "Name": "integrity",
+          "Value": "sha256-f6oflYVl+QMcRu2McX3tJjbLjSTdg6L9H9PrOm2nET0="
+        }
+      ]
     }
   ]
 }

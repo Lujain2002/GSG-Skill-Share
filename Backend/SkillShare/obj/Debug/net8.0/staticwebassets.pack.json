@@ -1,8 +1,16 @@
 {
   "Files": [
     {
-      "Id": "C:\\Users\\Lenovo\\Desktop\\GSG-Project\\GSG-Skill-Share\\Backend\\SkillShare\\wwwroot\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png",
-      "PackagePath": "staticwebassets\\AvatarImages\\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png"
+      "Id": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\382d42e3-7060-48b5-afc7-e7adc2876d56.jfif",
+      "PackagePath": "staticwebassets\\AvatarImages\\382d42e3-7060-48b5-afc7-e7adc2876d56.jfif"
+    },
+    {
+      "Id": "C:\\Users\\yazed\\Desktop\\MRD_PROJECT\\Backend\\SkillShare\\wwwroot\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg",
+      "PackagePath": "staticwebassets\\AvatarImages\\49142b88-fe25-4661-b506-fdba1320fff0.jpg"
+    },
+    {
+      "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.SkillShare.Microsoft.AspNetCore.StaticWebAssetEndpoints.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssetEndpoints.props"
     },
     {
       "Id": "obj\\Debug\\net8.0\\staticwebassets\\msbuild.SkillShare.Microsoft.AspNetCore.StaticWebAssets.props",

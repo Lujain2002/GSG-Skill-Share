@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { useAuth } from '../context/AuthContext';
+import AuthCtx from '../context/AuthContext';
+const { useAuth } = AuthCtx;
 import { TextField, Button, Alert, Stack } from '@mui/material';
 import { validateEmail, validatePassword, validateName } from '../utils/validation';
 

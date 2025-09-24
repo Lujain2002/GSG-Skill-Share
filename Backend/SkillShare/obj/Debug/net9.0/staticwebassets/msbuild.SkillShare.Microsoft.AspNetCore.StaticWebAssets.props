@@ -1,22 +1,22 @@
 ﻿<Project>
   <ItemGroup>
-    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\AvatarImages\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png'))">
+    <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\AvatarImages\382d42e3-7060-48b5-afc7-e7adc2876d56.jfif'))">
       <SourceType>Package</SourceType>
       <SourceId>SkillShare</SourceId>
       <ContentRoot>$(MSBuildThisFileDirectory)..\staticwebassets\</ContentRoot>
       <BasePath>_content/SkillShare</BasePath>
-      <RelativePath>AvatarImages/0f94fb30-fb18-452e-ad75-f1a0b319ff31.png</RelativePath>
+      <RelativePath>AvatarImages/382d42e3-7060-48b5-afc7-e7adc2876d56.jfif</RelativePath>
       <AssetKind>All</AssetKind>
       <AssetMode>All</AssetMode>
       <AssetRole>Primary</AssetRole>
       <RelatedAsset></RelatedAsset>
       <AssetTraitName></AssetTraitName>
       <AssetTraitValue></AssetTraitValue>
-      <Fingerprint>b7cdey1shy</Fingerprint>
-      <Integrity>+dr+AMvI8nXBp4t2OisILQdIONuFK6JOwZP9tfB7x0Q=</Integrity>
+      <Fingerprint>4jqbc3osrl</Fingerprint>
+      <Integrity>8KzclzVLwCSX2T0jOkKpM3ul1Xyugqzh1WaLBCWZd38=</Integrity>
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\AvatarImages\0f94fb30-fb18-452e-ad75-f1a0b319ff31.png'))</OriginalItemSpec>
+      <OriginalItemSpec>$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\AvatarImages\382d42e3-7060-48b5-afc7-e7adc2876d56.jfif'))</OriginalItemSpec>
     </StaticWebAsset>
     <StaticWebAsset Include="$([System.IO.Path]::GetFullPath('$(MSBuildThisFileDirectory)..\staticwebassets\AvatarImages\49142b88-fe25-4661-b506-fdba1320fff0.jpg'))">
       <SourceType>Package</SourceType>
