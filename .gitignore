@@ -1,11 +1,72 @@
-node_modules
-.dist
-build
+########################################
+# OS junk
+########################################
 .DS_Store
-.env*
-.idea/
+Thumbs.db
+desktop.ini
+
+########################################
+# Editors / IDEs
+########################################
 .vscode/
+.idea/
+.vs/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+########################################
+# Frontend (Vite / Node)
+########################################
+node_modules/
+dist/
+build/
+.eslintcache
 *.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
+pnpm-debug.log*
+coverage/
+
+########################################
+# Env files (keep example if present)
+########################################
+.env*
+!.env.example
+
+########################################
+# Backend (.NET / ASP.NET Core)
+########################################
+# Build outputs
+**/bin/
+**/obj/
+
+# Test and coverage artifacts
+TestResults/
+*.coverage
+*.coveragexml
+*.vsp
+*.vspx
+*.psess
+
+# NuGet packages (if produced locally)
+*.nupkg
+*.snupkg
+
+# LibMan restored libraries
+**/wwwroot/lib/
+
+# SQLite local databases (do not commit local dev DB)
+**/*.db
+**/*.db-shm
+**/*.db-wal
+Backend/SkillShare/SkillShare.db*
+
+########################################
+# Misc
+########################################
+# Temporary caches
+.parcel-cache/
+.turbo/
