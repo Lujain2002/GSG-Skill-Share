@@ -70,3 +70,21 @@ Backend/SkillShare/SkillShare.db*
 # Temporary caches
 .parcel-cache/
 .turbo/
+Backend/SkillShare/bin/Debug/net9.0/SkillShare.dll
+Backend/SkillShare/bin/Debug/net9.0/SkillShare.exe
+Backend/SkillShare/bin/Debug/net9.0/SkillShare.pdb
+Backend/SkillShare/bin/Debug/net9.0/SkillShare.staticwebassets.endpoints.json
+Backend/SkillShare/obj/Debug/net9.0/apphost.exe
+Backend/SkillShare/obj/Debug/net9.0/SkillShare.AssemblyInfo.cs
+Backend/SkillShare/obj/Debug/net9.0/SkillShare.AssemblyInfoInputs.cache
+Backend/SkillShare/obj/Debug/net9.0/SkillShare.dll
+Backend/SkillShare/obj/Debug/net9.0/SkillShare.pdb
+Backend/SkillShare/obj/Debug/net9.0/SkillShare.sourcelink.json
+Backend/SkillShare/obj/Debug/net9.0/staticwebassets.build.endpoints.json
+Backend/SkillShare/obj/Debug/net9.0/staticwebassets.build.json
+Backend/SkillShare/obj/Debug/net9.0/ref/SkillShare.dll
+Backend/SkillShare/obj/Debug/net9.0/refint/SkillShare.dll
+Backend/SkillShare/obj/Debug/net9.0/staticwebassets/msbuild.SkillShare.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
+Backend/SkillShare/obj/Debug/net9.0/SkillShare.AssemblyInfoInputs.cache
+Backend/SkillShare/obj/Debug/net9.0/SkillShare.AssemblyInfo.cs
+Backend/SkillShare/obj/Debug/net9.0/SkillShare.AssemblyInfoInputs.cache

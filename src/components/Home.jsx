@@ -192,7 +192,7 @@ export default function Home({ onStartSignup, onStartLogin }) {
           <ul style={{margin:0, paddingLeft:'1.1rem', lineHeight:1.6}}>
             <li>Match quickly with people who want what you teach and teach what you want.</li>
             <li>Book 30–60 minute sessions, complete them, and track your points.</li>
-            <li>Customize your profile, skills, and theme — everything is saved per user.</li>
+            <li>Customize your profile, skills, and theme</li>
           </ul>
         </Paper>
       </Container>
