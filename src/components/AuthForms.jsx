@@ -67,6 +67,7 @@ export function RegisterForm({ compact }) {
   const [email,setEmail] = useState('');
   const [password,setPassword] = useState('');
   const [error,setError] = useState('');
+  const [success,setSuccess] = useState('');
   const [touched,setTouched] = useState({ name:false, email:false, password:false });
   const [submitted,setSubmitted] = useState(false);
 
@@ -85,9 +86,18 @@ export function RegisterForm({ compact }) {
     if (disabled) return;
 
     try {
+      setError('');
+      setSuccess('');
       await register(name,email,password); // ← استدعاء API
+      setSuccess('Account created! You can log in now.');
+      setName('');
+      setEmail('');
+      setPassword('');
+      setTouched({ name:false, email:false, password:false });
+      setSubmitted(false);
     } catch(err) {
       setError(err.message);
+      setSuccess('');
     }
   };
 
@@ -97,23 +107,24 @@ export function RegisterForm({ compact }) {
       <form onSubmit={submit} noValidate>
         <Stack spacing={1.4}>
           <TextField size="small" label="Name" value={name}
-            onChange={e=>setName(e.target.value)}
+            onChange={e=>{ setName(e.target.value); if (success) setSuccess(''); }}
             onBlur={()=>setTouched(t=>({...t,name:true}))}
             error={showNameErr}
             helperText={showNameErr ? nameErr : ' '} required />
           <TextField size="small" label="Email" value={email}
-            onChange={e=>setEmail(e.target.value)}
+            onChange={e=>{ setEmail(e.target.value); if (success) setSuccess(''); }}
             onBlur={()=>setTouched(t=>({...t,email:true}))}
             error={showEmailErr}
             helperText={showEmailErr ? emailErr : ' '}
             autoComplete="email" required />
           <TextField size="small" label="Password" type="password" value={password}
-            onChange={e=>setPassword(e.target.value)}
+            onChange={e=>{ setPassword(e.target.value); if (success) setSuccess(''); }}
             onBlur={()=>setTouched(t=>({...t,password:true}))}
             error={showPassErr}
             helperText={showPassErr ? passErr : ' '}
             autoComplete="new-password" required />
           {error && <Alert severity="error" variant="filled">{error}</Alert>}
+          {success && <Alert severity="success" variant="filled">{success}</Alert>}
           <Button variant="contained" type="submit" disabled={disabled}>Register</Button>
         </Stack>
       </form>
