@@ -125,6 +125,7 @@ export function AuthProvider({ children }) {
 
   const logout = () => {
     localStorage.removeItem('token');
+    localStorage.removeItem('user');
     setCurrentUser(null);
     setUsers([]);
     if (themeCtx) {
@@ -136,8 +137,9 @@ export function AuthProvider({ children }) {
   // Hydrate from localStorage on load (if user already logged)
   useEffect(() => {
     try {
+      const token = localStorage.getItem('token');
       const cached = JSON.parse(localStorage.getItem('user'));
-      if (cached && cached.id) {
+      if (token && cached && cached.id) {
         setCurrentUser(cached);
         fetchUsers();
         // also fetch full profile to ensure skills are present
