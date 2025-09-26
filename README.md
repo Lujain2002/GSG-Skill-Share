@@ -56,7 +56,6 @@ Open the shown localhost URL.
 - Cancel: refunds learner if not completed.
 
 ### Roadmap (Next)
-- Real backend (auth, persistence, realtime)
 - Availability scheduling & calendar integration
 - Ratings & reviews
 - Chat & notifications
