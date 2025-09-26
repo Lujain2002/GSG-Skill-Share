@@ -1,10 +1,11 @@
-import React, { useMemo } from 'react';
+import React, { useMemo, useState } from 'react';
 import { Box, Container, Typography, Button, Stack, Paper, Chip, Grid, Card, CardContent } from '@mui/material';
 import SettingsSuggestIcon from '@mui/icons-material/SettingsSuggest';
 import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import EmojiPeopleOutlinedIcon from '@mui/icons-material/EmojiPeopleOutlined';
 import { motion } from 'framer-motion';
+import Developers from './Developers';
 
 const MotionBox = motion(Box);
 const MotionContainer = motion(Container);
@@ -56,6 +57,7 @@ export default function Home({ onStartSignup, onStartLogin }) {
   const PANEL_DARK = '#222A28'; // dark backgrounds
   const PANEL_MED = '#374036'; // medium backgrounds
   const TEXT_ON_DARK = '#E6ECEC'; // readable text on dark panels
+  const [isDevelopersOpen, setDevelopersOpen] = useState(false);
   const floatingShapes = useMemo(() => ([
     { size: 260, top: '-90px', left: '-80px', delay: 0 },
     { size: 320, top: '40%', left: '-120px', delay: 1.2 },
@@ -277,6 +279,30 @@ export default function Home({ onStartSignup, onStartLogin }) {
                 }}
               >
                 See how it works
+              </Button>
+            </MotionButtonWrapper>
+            <MotionButtonWrapper
+              initial={{ scale: 0.9, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ delay: 0.75, duration: 0.5, ease: 'easeOut' }}
+              whileHover={{ scale: 1.02, x: 2 }}
+              whileTap={{ scale: 0.97 }}
+            >
+              <Button
+                size="large"
+                variant="text"
+                onClick={() => setDevelopersOpen(true)}
+                sx={{
+                  color:ACCENT,
+                  px:{ xs:1.8, md:2.4 },
+                  py:{ xs:1, md:1.1 },
+                  fontSize:{ xs:'0.9rem', md:'1rem' },
+                  fontWeight:600,
+                  letterSpacing:'0.06em',
+                  '&:hover':{ color:'#545766', bgcolor:'transparent' }
+                }}
+              >
+                Meet the developers
               </Button>
             </MotionButtonWrapper>
           </Stack>
@@ -666,6 +692,7 @@ export default function Home({ onStartSignup, onStartLogin }) {
         </MotionStack>
       </Container>
       </Box>
+      <Developers open={isDevelopersOpen} onClose={() => setDevelopersOpen(false)} />
     </MotionBox>
   );
 }
