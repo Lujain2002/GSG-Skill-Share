@@ -2,6 +2,7 @@ import React, { useMemo, useState, useEffect, useRef } from 'react';
 import { Container, Box, Typography, Stack, Card, CardContent, Button, Chip, IconButton } from '@mui/material';
 import GitHubIcon from '@mui/icons-material/GitHub';
 import EmailIcon from '@mui/icons-material/Email';
+import LinkedInIcon from '@mui/icons-material/LinkedIn';
 import CloseIcon from '@mui/icons-material/Close';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -25,7 +26,8 @@ const developers = [
     focus: ['Design Systems', 'Motion UI', 'DX Tooling'],
     description: 'Shapes expressive interfaces and ensures every interaction feels delightful.',
     github: 'https://github.com/Yazed-Hasan',
-    email: 'mailto:y.zreak@gmail.com@gmail.com'
+    email: 'mailto:y.zreak@gmail.com@gmail.com',
+    linkedin: 'https://www.linkedin.com/in/yazed-zreak-396459272/'
   }
 ];
 
@@ -366,6 +368,26 @@ export default function Developers({ open, onClose }) {
                           >
                             Email
                           </MotionButton>
+                          {dev.linkedin && (
+                            <MotionButton
+                              component="a"
+                              href={dev.linkedin}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              variant="outlined"
+                              startIcon={<LinkedInIcon />}
+                              whileHover={{ scale: 1.03 }}
+                              whileTap={{ scale: 0.97 }}
+                              sx={{
+                                textTransform: 'none',
+                                fontWeight: 600,
+                                letterSpacing: '0.04em',
+                                borderRadius: 2.5
+                              }}
+                            >
+                              LinkedIn
+                            </MotionButton>
+                          )}
                         </Stack>
                       </CardContent>
                     </MotionCard>
@@ -440,25 +462,46 @@ export default function Developers({ open, onClose }) {
                       <Typography variant="body2" sx={{ lineHeight: 1.7, opacity: 0.78 }}>
                         {activeDev.description}
                       </Typography>
-                      <MotionButton
-                        component="a"
-                        href={activeDev.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        variant="contained"
-                        startIcon={<GitHubIcon />}
-                        whileHover={{ scale: 1.03 }}
-                        whileTap={{ scale: 0.97 }}
-                        sx={{
-                          alignSelf: 'flex-start',
-                          textTransform: 'none',
-                          fontWeight: 700,
-                          letterSpacing: '0.05em',
-                          borderRadius: 2.5
-                        }}
-                      >
-                        View on GitHub
-                      </MotionButton>
+                      <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.2}>
+                        <MotionButton
+                          component="a"
+                          href={activeDev.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          variant="contained"
+                          startIcon={<GitHubIcon />}
+                          whileHover={{ scale: 1.03 }}
+                          whileTap={{ scale: 0.97 }}
+                          sx={{
+                            textTransform: 'none',
+                            fontWeight: 700,
+                            letterSpacing: '0.05em',
+                            borderRadius: 2.5
+                          }}
+                        >
+                          View on GitHub
+                        </MotionButton>
+                        {activeDev.linkedin && (
+                          <MotionButton
+                            component="a"
+                            href={activeDev.linkedin}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            variant="outlined"
+                            startIcon={<LinkedInIcon />}
+                            whileHover={{ scale: 1.03 }}
+                            whileTap={{ scale: 0.97 }}
+                            sx={{
+                              textTransform: 'none',
+                              fontWeight: 600,
+                              letterSpacing: '0.04em',
+                              borderRadius: 2.5
+                            }}
+                          >
+                            Connect on LinkedIn
+                          </MotionButton>
+                        )}
+                      </Stack>
                     </Box>
                   </MotionBox>
                 </MotionBox>
