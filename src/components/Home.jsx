@@ -145,24 +145,56 @@ export default function Home({ onStartSignup, onStartLogin }) {
           sx={{ position: 'relative', zIndex: 1, flexGrow: 1, display:'flex', flexDirection:'column', justifyContent:'center', pb:{ xs:6, md:8 } }}
         >
           <Typography
-            variant="h3"
+            variant="h2"
             component={motion.h1}
             initial="hidden"
             animate="visible"
             variants={revealVariants}
             custom={0}
-            sx={{textAlign:'center', fontWeight:800, mb:2}}
+            sx={{
+              textAlign:'center',
+              fontWeight:800,
+              mb:{ xs:2.5, md:3 },
+              fontSize:{ xs:'2.35rem', sm:'2.85rem', md:'3.45rem' },
+              lineHeight:{ xs:1.08, md:1.04 },
+              letterSpacing:{ xs:'-0.4px', md:'-0.8px' }
+            }}
           >
-            <Box component={motion.span} sx={{color:ACCENT}} variants={revealVariants} custom={0.1}>Learn</Box> by teaching. Teach by <Box component={motion.span} sx={{color:ACCENT}} variants={revealVariants} custom={0.15}>learning</Box>.
+            <Box
+              component={motion.span}
+              sx={{color:ACCENT, display:'inline-block'}}
+              variants={revealVariants}
+              custom={0.1}
+            >
+              Learn
+            </Box>{' '}
+            by teaching. Teach by{' '}
+            <Box
+              component={motion.span}
+              sx={{color:ACCENT, display:'inline-block'}}
+              variants={revealVariants}
+              custom={0.15}
+            >
+              learning
+            </Box>
+            .
           </Typography>
           <Typography
-            variant="h6"
+            variant="subtitle1"
             component={motion.p}
             initial="hidden"
             animate="visible"
             variants={revealVariants}
             custom={0.25}
-            sx={{textAlign:'center', opacity:.8, mb:3}}
+            sx={{
+              textAlign:'center',
+              opacity:.82,
+              mb:{ xs:3, md:4 },
+              maxWidth:580,
+              mx:'auto',
+              fontSize:{ xs:'1.05rem', md:'1.2rem' },
+              lineHeight:{ xs:1.6, md:1.7 }
+            }}
           >
             Earn points when you teach. Spend them to learn — match with peers instantly.
           </Typography>
@@ -171,7 +203,7 @@ export default function Home({ onStartSignup, onStartLogin }) {
             direction={{xs:'column', sm:'row'}}
             spacing={1}
             justifyContent="center"
-            sx={{mb:3}}
+            sx={{mb:3.5, alignItems:'center'}}
             initial="hidden"
             animate="visible"
             variants={revealVariants}
@@ -186,7 +218,15 @@ export default function Home({ onStartSignup, onStartLogin }) {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4 + idx * 0.1, duration: 0.45, ease: 'easeOut' }}
-                sx={{borderColor:ACCENT, color:ACCENT}}
+                sx={{
+                  borderColor:ACCENT,
+                  color:ACCENT,
+                  fontSize:{ xs:'0.78rem', sm:'0.82rem' },
+                  fontWeight:600,
+                  letterSpacing:'0.04em',
+                  px:1.1,
+                  py:0.4
+                }}
               />
             ))}
           </MotionStack>
@@ -199,7 +239,21 @@ export default function Home({ onStartSignup, onStartLogin }) {
               whileHover={{ scale: 1.04 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Button size="large" variant="contained" onClick={onStartSignup} sx={{bgcolor:ACCENT, '&:hover':{bgcolor:'#545766'}}}>Get started — it’s free</Button>
+              <Button
+                size="large"
+                variant="contained"
+                onClick={onStartSignup}
+                sx={{
+                  bgcolor:ACCENT,
+                  px:{ xs:2.6, md:3.4 },
+                  py:{ xs:1.1, md:1.25 },
+                  fontSize:{ xs:'0.95rem', md:'1.05rem' },
+                  fontWeight:700,
+                  '&:hover':{bgcolor:'#545766'}
+                }}
+              >
+                Get started — it’s free
+              </Button>
             </MotionButtonWrapper>
             <MotionButtonWrapper
               initial={{ scale: 0.9, opacity: 0 }}
@@ -208,7 +262,22 @@ export default function Home({ onStartSignup, onStartLogin }) {
               whileHover={{ scale: 1.03 }}
               whileTap={{ scale: 0.98 }}
             >
-              <Button size="large" variant="outlined" href="#features" sx={{borderColor:ACCENT, color:ACCENT, '&:hover':{borderColor:'#545766', bgcolor:'transparent'}}}>See how it works</Button>
+              <Button
+                size="large"
+                variant="outlined"
+                href="#features"
+                sx={{
+                  borderColor:ACCENT,
+                  color:ACCENT,
+                  px:{ xs:2.6, md:3.2 },
+                  py:{ xs:1.05, md:1.2 },
+                  fontSize:{ xs:'0.92rem', md:'1.02rem' },
+                  fontWeight:600,
+                  '&:hover':{borderColor:'#545766', bgcolor:'transparent'}
+                }}
+              >
+                See how it works
+              </Button>
             </MotionButtonWrapper>
           </Stack>
         </MotionContainer>
@@ -217,7 +286,19 @@ export default function Home({ onStartSignup, onStartLogin }) {
       <Box component="footer" sx={{ position:'relative' }}>
         {/* Following sections (feature grid, banners, etc.) */}
       <Container id="features" maxWidth="lg" sx={{pb:5}}>
-        <Typography variant="h4" sx={{mb:2, textAlign:'center', fontWeight:800, letterSpacing:.3}}>How it works</Typography>
+        <Typography
+          variant="h4"
+          sx={{
+            mb:{ xs:2, md:2.8 },
+            textAlign:'center',
+            fontWeight:800,
+            letterSpacing:{ xs:'0.4px', md:'0.8px' },
+            fontSize:{ xs:'2rem', md:'2.5rem' },
+            lineHeight:{ xs:1.08, md:1.05 }
+          }}
+        >
+          How it works
+        </Typography>
         <Grid container spacing={{xs:2, md:3}}>
           {[{
             title: 'Set your skills',
@@ -249,9 +330,26 @@ export default function Home({ onStartSignup, onStartLogin }) {
                     <Box sx={{width:40, height:40, borderRadius:2, display:'grid', placeItems:'center', bgcolor:'#00000022'}}>
                       <s.Icon sx={{color:ACCENT}} />
                     </Box>
-                    <Typography variant="h6" sx={{fontWeight:700}}>{s.title}</Typography>
+                    <Typography
+                      variant="h6"
+                      sx={{
+                        fontWeight:700,
+                        fontSize:{ xs:'1.12rem', md:'1.25rem' }
+                      }}
+                    >
+                      {s.title}
+                    </Typography>
                   </Box>
-                  <Typography variant="body1" sx={{opacity:.9, lineHeight:1.65}}>{s.desc}</Typography>
+                  <Typography
+                    variant="body1"
+                    sx={{
+                      opacity:.9,
+                      lineHeight:1.75,
+                      fontSize:{ xs:'0.98rem', md:'1.08rem' }
+                    }}
+                  >
+                    {s.desc}
+                  </Typography>
                 </CardContent>
               </MotionCard>
             </Grid>
@@ -289,10 +387,26 @@ export default function Home({ onStartSignup, onStartLogin }) {
               viewport={{ once: true, amount: 0.3 }}
               variants={revealVariants}
             >
-              <Typography variant="h4" sx={{fontWeight:800, lineHeight:1.1}}>
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight:800,
+                  lineHeight:{ xs:1.12, md:1.08 },
+                  fontSize:{ xs:'2rem', md:'2.35rem' }
+                }}
+              >
                 <Box component="span" sx={{color:ACCENT}}>Search for skills</Box><br/>you want to learn
               </Typography>
-              <Typography variant="body1" sx={{mt:1.5, maxWidth:560, opacity:.95, lineHeight:1.8}}>
+              <Typography
+                variant="body1"
+                sx={{
+                  mt:1.5,
+                  maxWidth:560,
+                  opacity:.95,
+                  lineHeight:1.85,
+                  fontSize:{ xs:'1rem', md:'1.08rem' }
+                }}
+              >
                 Discover exactly what you need to enhance your toolkit. Use simple filters to find the perfect peer teacher across both campuses.
               </Typography>
               <Box sx={{position:'absolute', left:'50%', bottom:24, transform:'translateX(-50%)', color:ACCENT, bgcolor:PANEL_DARK, borderRadius:'50%', width:56, height:56, display:'grid', placeItems:'center', boxShadow:'0 10px 30px -12px rgba(0,0,0,.5)'}}>
@@ -326,15 +440,55 @@ export default function Home({ onStartSignup, onStartLogin }) {
               variants={revealVariants}
               custom={0.2}
             >
-              <Typography variant="h4" sx={{fontWeight:800, lineHeight:1.1}}>
+              <Typography
+                variant="h4"
+                sx={{
+                  fontWeight:800,
+                  lineHeight:{ xs:1.12, md:1.08 },
+                  fontSize:{ xs:'2rem', md:'2.35rem' }
+                }}
+              >
                 <Box component="span" sx={{color:ACCENT}}>Schedule</Box> and collaborate fast
               </Typography>
-              <Typography variant="body1" sx={{mt:1.5, maxWidth:560, opacity:.95, lineHeight:1.8}}>
+              <Typography
+                variant="body1"
+                sx={{
+                  mt:1.5,
+                  maxWidth:560,
+                  opacity:.95,
+                  lineHeight:1.85,
+                  fontSize:{ xs:'1rem', md:'1.08rem' }
+                }}
+              >
                 Pick a time, confirm the session, and jump in. Your points balance updates automatically when sessions are completed.
               </Typography>
               <Stack direction="row" spacing={1.5} sx={{mt:2}}>
-                <Chip label="30–60 min" sx={{borderColor:ACCENT, color:ACCENT}} variant="outlined" />
-                <Chip label="Instant matches" sx={{borderColor:ACCENT, color:ACCENT}} variant="outlined" />
+                <Chip
+                  label="30–60 min"
+                  sx={{
+                    borderColor:ACCENT,
+                    color:ACCENT,
+                    fontSize:{ xs:'0.76rem', md:'0.82rem' },
+                    fontWeight:600,
+                    letterSpacing:'0.05em',
+                    px:1,
+                    py:0.35
+                  }}
+                  variant="outlined"
+                />
+                <Chip
+                  label="Instant matches"
+                  sx={{
+                    borderColor:ACCENT,
+                    color:ACCENT,
+                    fontSize:{ xs:'0.76rem', md:'0.82rem' },
+                    fontWeight:600,
+                    letterSpacing:'0.05em',
+                    px:1,
+                    py:0.35
+                  }}
+                  variant="outlined"
+                />
               </Stack>
             </MotionPaper>
           </Grid>
@@ -354,10 +508,26 @@ export default function Home({ onStartSignup, onStartLogin }) {
           viewport={{ once: true, amount: 0.4 }}
           variants={revealVariants}
         >
-          <Typography variant="h4" sx={{fontWeight:900, mb:1}}>
+          <Typography
+            variant="h4"
+            sx={{
+              fontWeight:900,
+              mb:{ xs:1, md:1.4 },
+              fontSize:{ xs:'2.1rem', md:'2.6rem' },
+              lineHeight:{ xs:1.08, md:1.04 }
+            }}
+          >
             <Box component="span" sx={{color:ACCENT}}>Connect</Box> & Exchange Knowledge
           </Typography>
-          <Typography variant="body1" sx={{opacity:.95, maxWidth:980}}>
+          <Typography
+            variant="body1"
+            sx={{
+              opacity:.95,
+              maxWidth:980,
+              fontSize:{ xs:'1rem', md:'1.08rem' },
+              lineHeight:1.85
+            }}
+          >
             One click connects you directly with your match. Set up a call or meeting, exchange knowledge, and build a connection. No intermediaries, no complications — PURE PEER LEARNING!
           </Typography>
         </MotionPaper>
@@ -370,10 +540,31 @@ export default function Home({ onStartSignup, onStartLogin }) {
     viewport={{ once: true, amount: 0.5 }}
     variants={revealVariants}
   >
-          <Typography variant="h6" sx={{mb:2}}>Popular categories</Typography>
+          <Typography
+            variant="h6"
+            sx={{
+              mb:2,
+              fontSize:{ xs:'1.15rem', md:'1.3rem' },
+              fontWeight:700
+            }}
+          >
+            Popular categories
+          </Typography>
           <Stack direction="row" flexWrap="wrap" gap={1}>
             {['Programming','Design','Marketing','Languages','Music','Career','Math','Science','Art'].map(c=> (
-              <Chip key={c} label={c} variant="outlined" sx={{borderColor:ACCENT, color:ACCENT}}
+              <Chip
+                key={c}
+                label={c}
+                variant="outlined"
+                sx={{
+                  borderColor:ACCENT,
+                  color:ACCENT,
+                  fontSize:{ xs:'0.78rem', md:'0.84rem' },
+                  fontWeight:600,
+                  letterSpacing:'0.05em',
+                  px:1.15,
+                  py:0.4
+                }}
                 component={motion.div}
                 whileHover={{ y: -4, boxShadow: '0 15px 30px -20px rgba(0,0,0,.45)' }}
                 transition={{ type: 'spring', stiffness: 220, damping: 18 }}
@@ -390,8 +581,17 @@ export default function Home({ onStartSignup, onStartLogin }) {
     viewport={{ once: true, amount: 0.45 }}
     variants={revealVariants}
   >
-          <Typography variant="h6" gutterBottom>Why SkillShare?</Typography>
-          <ul style={{margin:0, paddingLeft:'1.1rem', lineHeight:1.6}}>
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{
+              fontSize:{ xs:'1.18rem', md:'1.32rem' },
+              fontWeight:700
+            }}
+          >
+            Why SkillShare?
+          </Typography>
+          <ul style={{margin:0, paddingLeft:'1.1rem', lineHeight:1.75, fontSize:'1.02rem'}}>
             <li>Match quickly with people who want what you teach and teach what you want.</li>
             <li>Book 30–60 minute sessions, complete them, and track your points.</li>
             <li>Customize your profile, skills, and theme</li>
@@ -400,7 +600,16 @@ export default function Home({ onStartSignup, onStartLogin }) {
       </Container>
 
       <Container maxWidth="md" sx={{pb:10, textAlign:'center'}}>
-        <Typography variant="h6" sx={{mb:1}}>Ready to start?</Typography>
+        <Typography
+          variant="h6"
+          sx={{
+            mb:1.4,
+            fontSize:{ xs:'1.22rem', md:'1.4rem' },
+            fontWeight:700
+          }}
+        >
+          Ready to start?
+        </Typography>
         <MotionStack
           direction={{xs:'column', sm:'row'}}
           spacing={1.5}
@@ -415,7 +624,21 @@ export default function Home({ onStartSignup, onStartLogin }) {
             whileTap={{ scale: 0.97 }}
             transition={{ type: 'spring', stiffness: 240, damping: 18 }}
           >
-            <Button size="large" variant="contained" onClick={onStartSignup} sx={{bgcolor:ACCENT, '&:hover':{bgcolor:'#545766'}}}>Create your free account</Button>
+            <Button
+              size="large"
+              variant="contained"
+              onClick={onStartSignup}
+              sx={{
+                bgcolor:ACCENT,
+                px:{ xs:2.8, md:3.5 },
+                py:{ xs:1.1, md:1.28 },
+                fontSize:{ xs:'0.96rem', md:'1.08rem' },
+                fontWeight:700,
+                '&:hover':{bgcolor:'#545766'}
+              }}
+            >
+              Create your free account
+            </Button>
           </MotionButtonWrapper>
           {onStartLogin && (
             <MotionButtonWrapper
@@ -423,7 +646,21 @@ export default function Home({ onStartSignup, onStartLogin }) {
               whileTap={{ scale: 0.97 }}
               transition={{ type: 'spring', stiffness: 220, damping: 20 }}
             >
-              <Button size="large" variant="text" onClick={onStartLogin} sx={{color:ACCENT, '&:hover':{bgcolor:'transparent', color:'#545766'}}}>Already have an account? Log in</Button>
+              <Button
+                size="large"
+                variant="text"
+                onClick={onStartLogin}
+                sx={{
+                  color:ACCENT,
+                  px:{ xs:1.6, md:2 },
+                  py:{ xs:1, md:1.1 },
+                  fontSize:{ xs:'0.92rem', md:'1.02rem' },
+                  fontWeight:600,
+                  '&:hover':{bgcolor:'transparent', color:'#545766'}
+                }}
+              >
+                Already have an account? Log in
+              </Button>
             </MotionButtonWrapper>
           )}
         </MotionStack>
