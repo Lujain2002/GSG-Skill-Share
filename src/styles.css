@@ -24,6 +24,28 @@ header.nav h1 { font-size:1.05rem; margin:0; font-weight:600; letter-spacing:.5p
 .card { background:#161c24; border:1px solid #232b36; padding:1rem 1.1rem; border-radius:10px; display:flex; flex-direction:column; gap:.75rem; min-height:100px; transition:background .35s ease,border-color .35s ease,color .35s ease; }
 .card h3 { margin:.25rem 0 .5rem; font-size:1rem; }
 .muted { color:#94a3b8; font-size:.82rem; }
+/* Dashboard metrics */
+.metrics { grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); }
+.metric { position:relative; overflow:hidden; }
+.stat-label { font-size:.75rem; letter-spacing:.4px; color:#94a3b8; text-transform:uppercase; }
+.stat-value { font-size:1.9rem; font-weight:700; line-height:1.2; margin-top:.15rem; }
+/* Dashboard layout grid */
+.dashboard-grid { display:grid; gap:1rem; grid-template-columns:repeat(12,1fr); }
+.dashboard-hero { grid-column:1/-1; }
+@media (max-width:900px) {
+	.dashboard-grid { grid-template-columns:repeat(6,1fr); }
+}
+@media (max-width:600px) {
+	.dashboard-grid { grid-template-columns:repeat(1,1fr); }
+}
+/* Place metrics nicely across columns */
+.dashboard-grid > .metric { grid-column: span 3; }
+@media (max-width:900px) {
+	.dashboard-grid > .metric { grid-column: span 3; }
+}
+@media (max-width:600px) {
+	.dashboard-grid > .metric { grid-column: span 1; }
+}
 form.flexcol { display:flex; flex-direction:column; gap:.75rem; }
 .skills-list { display:flex; flex-wrap:wrap; gap:.5rem; }
 .chip { background:#1e2530; padding:.35rem .6rem; border-radius:999px; font-size:.75rem; display:inline-flex; gap:.35rem; align-items:center; }
@@ -70,6 +92,15 @@ tbody tr:nth-child(even) { background:#10151c; }
 .inline { display:inline; }
 footer { margin-top:3rem; padding:2rem 1rem; font-size:.75rem; text-align:center; color:#64748b; }
 
+/* Light mode table and status adjustments */
+html[data-color-mode='light'] table { color:#1a1f25; }
+html[data-color-mode='light'] thead { background:#eaf0f6; }
+html[data-color-mode='light'] tbody tr:nth-child(odd) { background:#ffffff; }
+html[data-color-mode='light'] tbody tr:nth-child(even) { background:#f5f8fc; }
+/* Ensure status text stays readable on colored backgrounds */
+.status { color:#e2e8f0; }
+html[data-color-mode='light'] .status { color:#ffffff; }
+
 /* Auth tabs */
 .auth-tabs { max-width:480px; margin:0.5rem auto 0; }
 .auth-tab-buttons { position:relative; display:flex; background:rgba(20,26,31,.55); border:1px solid rgba(35,43,54,.6); border-radius:14px; padding:4px; margin-bottom:1.15rem; gap:4px; backdrop-filter:blur(14px) saturate(150%); -webkit-backdrop-filter:blur(14px) saturate(150%); }
@@ -85,4 +116,8 @@ footer { margin-top:3rem; padding:2rem 1rem; font-size:.75rem; text-align:center
 .fade-panel.active { opacity:1; transform:translateY(0); pointer-events:auto; }
 .card.auth { padding-top:1.25rem; background:rgba(22,28,36,.6); border:1px solid rgba(40,50,63,.55); backdrop-filter:blur(18px) saturate(150%); -webkit-backdrop-filter:blur(18px) saturate(150%); box-shadow:0 10px 28px -12px rgba(0,0,0,.65); }
 .card.auth h3 { text-align:center; margin-top:0; }
+
+/* Matches exchanged styling */
+.match-card.exchanged { opacity:.9; border-color:#334155; background:linear-gradient(180deg, rgba(30,37,48,.55), rgba(22,28,36,.55)); }
+.match-card.exchanged .badge { background:#475569; color:#e2e8f0; }
 

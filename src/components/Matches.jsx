@@ -1,6 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../context/AuthContext';
 import BookSessionModal from './BookSessionModal';
+import { Box, TextField, Select, MenuItem, FormControlLabel, Checkbox, InputAdornment, ToggleButton, ToggleButtonGroup, Avatar, Chip, Tooltip, IconButton, Button, Typography } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import FilterAltIcon from '@mui/icons-material/FilterAlt';
+import SortIcon from '@mui/icons-material/Sort';
+import BookOnlineIcon from '@mui/icons-material/BookOnline';
+import PersonIcon from '@mui/icons-material/Person';
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
+import UserProfileModal from './UserProfileModal';
+
+const COOLDOWN_DAYS = 14;
 
 export default function Matches() {
   const { currentUser } = useAuth();          

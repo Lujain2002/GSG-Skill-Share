@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import AuthTabs from './components/AuthTabs';
 import NavBar from './components/NavBar';
@@ -14,23 +14,21 @@ function InnerApp() {
   const { currentUser } = useAuth();
   const [tab,setTab] = useState('dashboard');
   const [bookFor,setBookFor] = useState(null);
+  useEffect(() => {
+    const handler = (e) => {
+      const t = e?.detail?.tab;
+      if (t) setTab(t);
+    };
+    window.addEventListener('navigateTab', handler);
+    return () => window.removeEventListener('navigateTab', handler);
+  }, []);
   if (!currentUser) {
     return (
       <div className="container" style={{marginTop:'2.5rem'}}>
         <h1 style={{textAlign:'center'}}>SkillShare – Phase 1 Prototype</h1>
         <p style={{textAlign:'center'}} className="muted">Peer skill exchange with a points economy.</p>
         <AuthTabs />
-        <div className="card" style={{marginTop:'1.5rem'}}>
-          <h3>About (Demo)</h3>
-          <p style={{fontSize:'.8rem',lineHeight:1.4}}>Local prototype. Data lives only in your browser (localStorage). Create multiple demo users to explore matching, booking and the points economy.</p>
-          <ul style={{fontSize:'.75rem',lineHeight:1.4}}>
-            <li>User mgmt: register / login</li>
-            <li>Skills: manage teach & learn lists</li>
-            <li>Matching: overlap scoring</li>
-            <li>Points: earn teaching, spend booking</li>
-            <li>Sessions: book · complete · cancel</li>
-          </ul>
-        </div>
+    
       </div>
     );
   }
@@ -46,7 +44,7 @@ function InnerApp() {
         {tab==='points' && <Points />}
       </div>
       {bookFor && <BookSessionModal teacher={bookFor} onClose={()=>setBookFor(null)} />}
-      <footer>SkillShare Phase 1 Prototype · LocalStorage · {new Date().getFullYear()}</footer>
+   
     </>
   );
 }
