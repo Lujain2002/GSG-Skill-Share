@@ -1,9 +1,24 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useMemo } from 'react';
 import { useAuth } from '../context/AuthContext';
 
 export default function Points() {
   const { currentUser, ledger, constants, refreshPoints } = useAuth();
   useEffect(() => { refreshPoints && refreshPoints(); }, []);
+
+  const entries = useMemo(() => {
+    if (!currentUser) return [];
+    return (ledger || []).filter(item => item.userId === currentUser.id);
+  }, [ledger, currentUser]);
+
+  if (!currentUser) {
+    return (
+      <div className="card">
+        <h3>Points & Ledger</h3>
+        <div className="muted">Log in to see your balance and ledger.</div>
+      </div>
+    );
+  }
+
   return (
     <div className="card">
       <h3>Points & Ledger</h3>
@@ -14,7 +29,7 @@ export default function Points() {
             <tr><th>When</th><th>Type</th><th>Amount</th><th>Reason</th></tr>
           </thead>
           <tbody>
-            {ledger.map(l => (
+            {entries.map(l => (
               <tr key={l.id}>
                 <td>{new Date(l.timestamp).toLocaleString()}</td>
                 <td>{l.type}</td>
@@ -24,7 +39,7 @@ export default function Points() {
             ))}
           </tbody>
         </table>
-        {ledger.length === 0 && <div className="muted">No ledger entries yet</div>}
+        {entries.length === 0 && <div className="muted">No ledger entries yet</div>}
       </div>
     </div>
   );
