@@ -17,7 +17,7 @@ const developers = [
     focus: ['API Architecture', 'Data Modeling', 'Security'],
     description: 'Orchestrates scalable services, resilient pipelines, and reliable data flows.',
     github: 'https://github.com/Lujain2002',
-    email: 'mailto:lujain.alhajali2002@gmail.com'
+    email: 'mailto:lojienbarrham@gmail.com'
   },
   {
     name: 'Yazed Hasan',
@@ -25,7 +25,7 @@ const developers = [
     focus: ['Design Systems', 'Motion UI', 'DX Tooling'],
     description: 'Shapes expressive interfaces and ensures every interaction feels delightful.',
     github: 'https://github.com/Yazed-Hasan',
-    email: 'mailto:yazed.hasan.dev@gmail.com'
+    email: 'mailto:y.zreak@gmail.com@gmail.com'
   }
 ];
 
