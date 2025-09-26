@@ -41,6 +41,9 @@ Open the shown localhost URL.
 3. Login as a learner, open Matches, book a session with a teacher.
 4. Switch to teacher account, complete session to earn points.
 
+### API Documentation
+- Full Postman collection and reference: [SkillShare API Docs](https://www.postman.com/unlogybackend/projects/documentation/punj9zu/skillshare)
+
 ### Points Rules
 - Start: 10 points on registration.
 - Earn: 5 points per 30 minutes taught.
