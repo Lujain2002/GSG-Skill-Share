@@ -12,7 +12,7 @@ const MotionButton = motion(Button);
 
 const developers = [
   {
-    name: 'Lujain Alhaj Ali',
+    name: 'Lujain Emad',
     role: 'Backend Engineer',
     focus: ['API Architecture', 'Data Modeling', 'Security'],
     description: 'Orchestrates scalable services, resilient pipelines, and reliable data flows.',
