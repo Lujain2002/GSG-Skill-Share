@@ -42,7 +42,9 @@ Open the shown localhost URL.
 4. Switch to teacher account, complete session to earn points.
 
 ### Demo Video
-- Watch a walkthrough of the SkillShare experience: [SkillShare Demo](https://1drv.ms/v/c/d75fc63197b922e8/ERX4WZhB67dBiDLmW5cTVTsBHiUCyaKi5fRlpPKg1yaPxg?e=iTJhkN)
+<video src="./src/context/Demo.mp4" controls width="820" style="max-width:100%; border-radius:12px; box-shadow: 0 8px 30px rgba(0,0,0,0.15);"></video>
+<br/>
+<sub>If the player doesn’t appear, you can download the video directly: <a href="./src/context/Demo.mp4">Demo.mp4</a></sub>
 
 ### API Documentation
 - Full Postman collection and reference: [SkillShare API Docs](https://www.postman.com/unlogybackend/projects/documentation/punj9zu/skillshare)
