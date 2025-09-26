@@ -5,7 +5,7 @@ import PeopleAltIcon from '@mui/icons-material/PeopleAlt';
 import EventAvailableIcon from '@mui/icons-material/EventAvailable';
 import EmojiPeopleOutlinedIcon from '@mui/icons-material/EmojiPeopleOutlined';
 
-export default function Home({ onStartSignup }) {
+export default function Home({ onStartSignup, onStartLogin }) {
   // Home page palette (requested)
   const ACCENT = '#636573'; // headings, rings, CTA
   const PANEL_DARK = '#222A28'; // dark backgrounds
@@ -199,7 +199,12 @@ export default function Home({ onStartSignup }) {
 
       <Container maxWidth="md" sx={{pb:10, textAlign:'center'}}>
         <Typography variant="h6" sx={{mb:1}}>Ready to start?</Typography>
-        <Button size="large" variant="contained" onClick={onStartSignup} sx={{bgcolor:ACCENT, '&:hover':{bgcolor:'#545766'}}}>Create your free account</Button>
+        <Stack direction={{xs:'column', sm:'row'}} spacing={1.5} justifyContent="center">
+          <Button size="large" variant="contained" onClick={onStartSignup} sx={{bgcolor:ACCENT, '&:hover':{bgcolor:'#545766'}}}>Create your free account</Button>
+          {onStartLogin && (
+            <Button size="large" variant="text" onClick={onStartLogin} sx={{color:ACCENT, '&:hover':{bgcolor:'transparent', color:'#545766'}}}>Already have an account? Log in</Button>
+          )}
+        </Stack>
       </Container>
     </>
   );
