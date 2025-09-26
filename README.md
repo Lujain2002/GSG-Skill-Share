@@ -41,6 +41,9 @@ Open the shown localhost URL.
 3. Login as a learner, open Matches, book a session with a teacher.
 4. Switch to teacher account, complete session to earn points.
 
+### Demo Video
+- Watch a walkthrough of the SkillShare experience: [SkillShare Demo](https://1drv.ms/v/c/d75fc63197b922e8/ERX4WZhB67dBiDLmW5cTVTsBHiUCyaKi5fRlpPKg1yaPxg?e=iTJhkN)
+
 ### API Documentation
 - Full Postman collection and reference: [SkillShare API Docs](https://www.postman.com/unlogybackend/projects/documentation/punj9zu/skillshare)
 
