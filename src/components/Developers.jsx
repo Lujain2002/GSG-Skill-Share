@@ -164,7 +164,30 @@ export default function Developers({ open, onClose }) {
               px: { xs: 2.2, md: 4 },
               py: { xs: 5.5, md: 7 },
               boxShadow: '0 40px 80px -40px rgba(4,9,25,0.9)',
-              overflowY: 'auto'
+              overflowY: 'auto',
+              scrollbarGutter: 'stable both-edges',
+              scrollbarWidth: 'thin',
+              scrollbarColor: theme => `${theme.palette.mode === 'dark' ? 'rgba(99,102,241,0.55)' : 'rgba(79,70,229,0.55)'} rgba(148,163,184,0.12)`,
+              '&::-webkit-scrollbar': {
+                width: '0.7rem'
+              },
+              '&::-webkit-scrollbar-track': {
+                background: theme => theme.palette.mode === 'dark' ? 'rgba(15,17,21,0.35)' : 'rgba(226,232,240,0.45)',
+                borderRadius: '999px'
+              },
+              '&::-webkit-scrollbar-thumb': {
+                background: theme => theme.palette.mode === 'dark'
+                  ? 'linear-gradient(180deg, rgba(99,102,241,0.8), rgba(34,211,238,0.7))'
+                  : 'linear-gradient(180deg, rgba(79,70,229,0.85), rgba(14,165,233,0.75))',
+                borderRadius: '999px',
+                border: theme => `2px solid ${theme.palette.mode === 'dark' ? 'rgba(15,17,21,0.45)' : 'rgba(226,232,240,0.6)'}`,
+                boxShadow: '0 6px 16px -8px rgba(15,18,40,0.45)'
+              },
+              '&::-webkit-scrollbar-thumb:hover': {
+                background: theme => theme.palette.mode === 'dark'
+                  ? 'linear-gradient(180deg, rgba(99,102,241,0.92), rgba(34,211,238,0.82))'
+                  : 'linear-gradient(180deg, rgba(79,70,229,0.95), rgba(14,165,233,0.88))'
+              }
             }}
           >
             <IconButton
