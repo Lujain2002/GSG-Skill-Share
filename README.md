@@ -1,19 +1,32 @@
-## SkillShare Phase 1 (Prototype)
+## SkillShare
 
-Local-first React (Vite) prototype implementing Phase 1 core features:
+### What is SkillShare?
+SkillShare is a peer-to-peer learning exchange: teach something you know, learn something new from another member, and keep track of it all with a simple points balance. This prototype showcases the first slice of that experience in a lightweight, local-first app.
 
-Features:
-- User registration / login (stored in localStorage; NOT secure, for demo only)
-- Skill management (can teach, want to learn lists with levels)
-- Basic skill matching (score by overlapping teach/learn skills)
-- Points economy (initial grant, spend when booking, earn when completing teaching)
-- Session booking (book, complete, cancel) & ledger
+### What you can do
+- **Create an account in seconds.** Set up a basic profile and come back to it any time.
+- **List the skills you can teach.** Add categories, confidence levels, and short notes so others know what to expect.
+- **Share the skills you want to learn.** Let the community see what knowledge you’re looking for.
+- **Browse your matches.** The app spots overlaps between your teach/learn lists and suggests the best peers to connect with.
+- **Book sessions.** Send a session request, confirm the details, and track the outcome.
+- **Earn and spend points.** Teaching rewards you; learning spends your balance. Everything stays inside the app’s simple ledger.
 
-Tech stack:
-- React 18 + Vite
-- No backend (localStorage persistence)
+### How it flows
+1. **Set up your profile.** Add a few skills you’re confident teaching and a few you’re eager to learn.
+2. **Explore matches.** Filter by category, focus on fresh opportunities, and open profiles to see more detail.
+3. **Request a session.** Choose a timeslot length, send the booking, and let the other person confirm.
+4. **Complete or cancel.** Mark sessions when they’re finished (teachers earn points) or cancel if plans change (learners get points back).
 
-### Run Dev Server
+### Points at a glance
+- Everyone starts with **10 points** when they join.
+- Teaching awards **5 points for every half hour** you deliver.
+- Booking a lesson uses the same rate, deducted at the time of booking.
+- Cancelling a booking before it happens returns the learner’s points automatically.
+
+### Why people like it
+- Makes it easy to give and receive help without cash.
+- Encourages short, focused lessons that fit into busy schedules.
+- Keeps both sides accountable with a transparent history of bookings and points.
 
 ```cmd
 npm install
