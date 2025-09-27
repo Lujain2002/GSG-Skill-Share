@@ -28,14 +28,15 @@ SkillShare is a peer-to-peer learning exchange: teach something you know, learn 
 - Encourages short, focused lessons that fit into busy schedules.
 - Keeps both sides accountable with a transparent history of bookings and points.
 
+
+### Usage Tips
+
 ```cmd
 npm install
 npm run dev
 ```
 
 Open the shown localhost URL.
-
-### Usage Tips
 1. Register first user (e.g. Alice) – add skills she can teach and wants to learn.
 2. Logout, register a second user (Bob) with complementary skills.
 3. Login as a learner, open Matches, book a session with a teacher.
@@ -61,5 +62,3 @@ Open the shown localhost URL.
 - Chat & notifications
 - Enhanced matching algorithm (availability, preferences)
 
-### Disclaimer
-Prototype only; do not use for production or store real credentials.

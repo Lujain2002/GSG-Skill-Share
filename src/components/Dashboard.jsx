@@ -100,7 +100,6 @@ export default function Dashboard() {
           <button onClick={() => go('points')}>Earn / Spend Points</button>
         </div>
 
-        <div className="muted" style={{marginTop:'.75rem'}}>Phase 1 demo: data stored locally in your browser (localStorage) with a live backend for profiles and stats.</div>
       </div>
 
       {/* Metrics cards aligned in grid */}
