@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useRef, useState } from 'react';
 import { useThemeSettings } from '../theme/ThemeProvider';
 import { DEFAULT_THEME_SETTINGS } from '../theme/constants';
 import { loadSessions, saveSessions, loadLedger, saveLedger } from '../utils/storage';
@@ -16,6 +16,7 @@ export function AuthProvider({ children }) {
   const [sessions, setSessions] = useState(loadSessions());
   const [ledger, setLedger] = useState(loadLedger());
   const [users, setUsers] = useState([]);
+  const skillCacheRef = useRef(new Map());
 
   // ----------------- Helpers -----------------
   const uuid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 9);
@@ -34,8 +35,17 @@ export function AuthProvider({ children }) {
   };
 
   const adjustPoints = (userId, delta) => {
-    if (!currentUser || currentUser.id !== userId) return;
-    setCurrentUser(u => ({ ...u, points: (u.points || 0) + delta }));
+    setCurrentUser(prev => {
+      if (!prev || prev.id !== userId) return prev;
+      const updatedPoints = (prev.points || 0) + delta;
+      const updated = { ...prev, points: updatedPoints };
+      try {
+        const cached = JSON.parse(localStorage.getItem('user')) || {};
+        localStorage.setItem('user', JSON.stringify({ ...cached, points: updatedPoints }));
+      } catch {}
+      setUsers(list => list.map(u => (u && u.id === userId ? { ...u, points: updatedPoints } : u)));
+      return updated;
+    });
   };
 
   // Fetch current points for the logged-in user from backend
@@ -56,6 +66,51 @@ export function AuthProvider({ children }) {
       // eslint-disable-next-line no-console
       console.error('refreshPoints failed', e);
     }
+  };
+
+  const parseErrorResponse = async (res, fallback = 'Failed to book session') => {
+    try {
+      const clone = res.clone();
+      const contentType = clone.headers.get('content-type') || '';
+      if (contentType.includes('application/json')) {
+        const data = await clone.json();
+        if (typeof data === 'string') return data;
+        return data?.message || data?.error || fallback;
+      }
+      const text = await clone.text();
+      return text || fallback;
+    } catch {
+      return fallback;
+    }
+  };
+
+  const resolveSkillId = async (teacherId, skillName) => {
+    if (!teacherId || !skillName) return null;
+    const cacheKey = `${teacherId}|${skillName.toLowerCase()}`;
+    const cache = skillCacheRef.current;
+    if (cache.has(cacheKey)) return cache.get(cacheKey);
+    try {
+      const res = await fetch(`${API_BASE}/api/UserSkills/${teacherId}`);
+      if (!res.ok) return null;
+      const list = await res.json();
+      if (!Array.isArray(list)) return null;
+      const match = list.find(item => {
+        const name = (item?.skillName || item?.skill || '').toLowerCase();
+        const type = item?.type;
+        const isTeach =
+          type === 0 ||
+          type === 'CanTeach' ||
+          (typeof type === 'string' && type.toLowerCase() === 'canteach');
+        return isTeach && name === skillName.toLowerCase();
+      });
+      if (match?.skillId) {
+        cache.set(cacheKey, match.skillId);
+        return match.skillId;
+      }
+    } catch (e) {
+      console.error('resolveSkillId failed', e);
+    }
+    return null;
   };
 
   // ----------------- Users (directory) -----------------
@@ -151,21 +206,23 @@ export function AuthProvider({ children }) {
   }, []);
 
   // ----------------- Sessions -----------------
-  const bookSession = ({ teacherId, learnerId, skill, durationMinutes = 30, scheduledAt }) => {
+  const bookSession = async ({ teacherId, learnerId, skill, skillId, durationMinutes = 30, scheduledAt }) => {
     if (!currentUser) throw new Error('Not logged in');
-    const cost = (durationMinutes / 30) * EARN_RATE_PER_30;
-    if ((currentUser.points || 0) < cost) throw new Error('Insufficient points');
+    if (!teacherId || !learnerId || !skill) throw new Error('Missing booking details');
+
+    const estimatedCost = (durationMinutes / 30) * EARN_RATE_PER_30;
+    if ((currentUser.points || 0) < estimatedCost) throw new Error('Insufficient points');
 
     // Mirror backend anti-abuse rules locally
     const now = new Date();
-  const dayWindow = new Date(now.getTime() - 24*60*60*1000);
-  const weekWindow = new Date(now.getTime() - 7*24*60*60*1000);
-  const monthWindow = new Date(now.getTime() - 30*24*60*60*1000);
+    const dayWindow = new Date(now.getTime() - 24 * 60 * 60 * 1000);
+    const weekWindow = new Date(now.getTime() - 7 * 24 * 60 * 60 * 1000);
+    const monthWindow = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
     const MAX_CONCURRENT_SCHEDULED_PER_PAIR = 1;
     const MAX_DAILY_SESSIONS_PER_PAIR = 2;
     const MAX_WEEKLY_SESSIONS_PER_PAIR = 5;
-  const COOLDOWN_DAYS_AFTER_MUTUAL_EXCHANGE = 14;
-  const MAX_MONTHLY_SESSIONS_PER_PAIR = 10;
+    const COOLDOWN_DAYS_AFTER_MUTUAL_EXCHANGE = 14;
+    const MAX_MONTHLY_SESSIONS_PER_PAIR = 10;
     const ALLOW_NEW_UNTAUGHT_SKILL_DURING_COOLDOWN = true;
 
     const pairSessions = sessions.filter(s =>
@@ -173,7 +230,6 @@ export function AuthProvider({ children }) {
       (s.teacherId === learnerId && s.learnerId === teacherId)
     );
 
-    // Mutual exchange check (completed both directions)
     const completedPair = pairSessions.filter(s => s.status === 'completed');
     const aTaughtB = completedPair.some(s => s.teacherId === teacherId && s.learnerId === learnerId);
     const bTaughtA = completedPair.some(s => s.teacherId === learnerId && s.learnerId === teacherId);
@@ -183,24 +239,25 @@ export function AuthProvider({ children }) {
         const t = new Date(s.completedAt || s.updatedAt || s.scheduledAt || s.createdAt || s.timestamp || now);
         return !acc || t > acc ? t : acc;
       }, null);
-      const cooldownEnds = new Date((lastCompleted || now).getTime() + COOLDOWN_DAYS_AFTER_MUTUAL_EXCHANGE*24*60*60*1000);
+      const cooldownEnds = new Date((lastCompleted || now).getTime() + COOLDOWN_DAYS_AFTER_MUTUAL_EXCHANGE * 24 * 60 * 60 * 1000);
       const inCooldown = now < cooldownEnds;
       if (inCooldown) {
         let allow = false;
         if (ALLOW_NEW_UNTAUGHT_SKILL_DURING_COOLDOWN) {
-          const alreadyTaughtThisSkillDirection = completedPair.some(s => s.teacherId === teacherId && s.learnerId === learnerId && (s.skill === skill));
+          const alreadyTaughtThisSkillDirection = completedPair.some(
+            s => s.teacherId === teacherId && s.learnerId === learnerId && s.skill && s.skill.toLowerCase() === skill.toLowerCase()
+          );
           if (!alreadyTaughtThisSkillDirection) allow = true;
         }
         if (!allow) {
           const leftMs = cooldownEnds.getTime() - now.getTime();
-          const leftDays = Math.floor(leftMs / (24*60*60*1000));
-          const leftHours = Math.floor((leftMs % (24*60*60*1000)) / (60*60*1000));
+          const leftDays = Math.floor(leftMs / (24 * 60 * 60 * 1000));
+          const leftHours = Math.floor((leftMs % (24 * 60 * 60 * 1000)) / (60 * 60 * 1000));
           throw new Error(`Cooldown active ${leftDays}d ${leftHours}h left. Book a new skill or wait.`);
         }
       }
     }
 
-    // Limits
     const concurrentScheduled = pairSessions.filter(s => s.status === 'scheduled').length;
     if (concurrentScheduled >= MAX_CONCURRENT_SCHEDULED_PER_PAIR)
       throw new Error('Pair already has a scheduled session. Complete or cancel it before booking another.');
@@ -217,20 +274,61 @@ export function AuthProvider({ children }) {
     if (monthlyCount >= MAX_MONTHLY_SESSIONS_PER_PAIR)
       throw new Error('Pair limit reached: max 10 sessions per 30 days.');
 
-    const session = {
-      id: uuid(),
+    const resolvedSkillId = skillId ?? await resolveSkillId(teacherId, skill);
+    if (!resolvedSkillId) throw new Error('Unable to resolve selected skill. Please refresh and try again.');
+
+    const payload = {
+      teacherId,
+      studentId: learnerId,
+      skillId: resolvedSkillId,
+      duration: durationMinutes,
+      scheduledAt
+    };
+
+    const headers = { 'Content-Type': 'application/json' };
+    const token = localStorage.getItem('token');
+    if (token) headers.Authorization = `Bearer ${token}`;
+
+    const res = await fetch(`${API_BASE}/api/Sessions/sessions/book`, {
+      method: 'POST',
+      headers,
+      body: JSON.stringify(payload)
+    });
+
+    if (!res.ok) {
+      const message = await parseErrorResponse(res);
+      throw new Error(message || 'Failed to book session');
+    }
+
+    let responseData = null;
+    try {
+      responseData = await res.json();
+    } catch {}
+
+    const finalCost = typeof responseData?.cost === 'number' ? responseData.cost : estimatedCost;
+    const serverSessionId = responseData?.sessionId ? String(responseData.sessionId) : uuid();
+
+    const sessionRecord = {
+      id: serverSessionId,
       teacherId,
       learnerId,
       skill,
+      skillId: resolvedSkillId,
       durationMinutes,
       status: 'scheduled',
       scheduledAt: scheduledAt || now.toISOString(),
       createdAt: now.toISOString()
     };
-    setSessions(prev => [session, ...prev]);
-    adjustPoints(learnerId, -cost);
-    addLedger(learnerId, 'spend', -cost, `Booked session: ${skill}`, session.id);
-    return session.id;
+
+    setSessions(prev => [sessionRecord, ...prev]);
+    adjustPoints(learnerId, -finalCost);
+    addLedger(learnerId, 'spend', -finalCost, `Booked session: ${skill}`, serverSessionId);
+
+    try {
+      await refreshPoints();
+    } catch {}
+
+    return sessionRecord.id;
   };
 
   const completeSession = (sessionId) => {
