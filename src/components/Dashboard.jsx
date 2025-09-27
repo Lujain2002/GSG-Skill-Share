@@ -1,4 +1,18 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import {
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell,
+  Tooltip,
+  BarChart,
+  CartesianGrid,
+  XAxis,
+  YAxis,
+  Bar,
+  Legend,
+  LabelList
+} from 'recharts';
 
 const API_BASE = 'http://localhost:5044';
 
@@ -61,6 +75,50 @@ export default function Dashboard() {
     window.dispatchEvent(new CustomEvent('navigateTab', { detail: { tab } }));
   };
 
+  const username = data.user?.userName || data.user?.username || data.user?.name || 'User';
+  const points = data.user?.points ?? 0;
+  const teaching = data.sessions?.teaching ?? 0;
+  const learning = data.sessions?.learning ?? 0;
+  const communityUsers = data.community?.users ?? 0;
+
+  const sessionMix = useMemo(() => {
+    const entries = [
+      { name: 'Teaching', value: teaching },
+      { name: 'Learning', value: learning }
+    ];
+    const total = entries.reduce((sum, item) => sum + (item.value || 0), 0);
+    return total === 0
+      ? [{ name: 'No sessions yet', value: 1, isPlaceholder: true }]
+      : entries;
+  }, [teaching, learning]);
+
+  const summaryBar = useMemo(() => {
+    const core = [
+      { name: 'Points', value: points },
+      { name: 'Teaching', value: teaching },
+      { name: 'Learning', value: learning }
+    ];
+    return core.map(item => ({ ...item, value: Math.max(item.value ?? 0, 0) }));
+  }, [points, teaching, learning]);
+
+  const palette = useMemo(() => ['#6366f1', '#22d3ee', '#f59e0b'], []);
+  const totalSessions = useMemo(() => teaching + learning, [teaching, learning]);
+  const sessionDetails = useMemo(() => {
+    if (!totalSessions) return [];
+    return [
+      { label: 'Teaching', value: teaching, percent: Math.round((teaching / totalSessions) * 100) },
+      { label: 'Learning', value: learning, percent: Math.round((learning / totalSessions) * 100) }
+    ];
+  }, [teaching, learning, totalSessions]);
+
+  const barDetails = useMemo(() => (
+    [
+      { label: 'Points available', value: points, helper: 'Spend points when you book lessons.' },
+      { label: 'Teaching sessions', value: teaching, helper: 'Completed or scheduled as a mentor.' },
+      { label: 'Learning sessions', value: learning, helper: 'Completed or scheduled as a learner.' }
+    ]
+  ), [points, teaching, learning]);
+
   if (loading) {
     return (
       <div className="card" aria-busy="true" aria-live="polite">
@@ -79,12 +137,6 @@ export default function Dashboard() {
       </div>
     );
   }
-
-  const username = data.user?.userName || data.user?.username || data.user?.name || 'User';
-  const points = data.user?.points ?? 0;
-  const teaching = data.sessions?.teaching ?? 0;
-  const learning = data.sessions?.learning ?? 0;
-  const communityUsers = data.community?.users ?? 0;
 
   return (
     <div className="dashboard-grid" role="region" aria-label="Dashboard overview and key metrics">
@@ -125,6 +177,118 @@ export default function Dashboard() {
         <div className="stat-label">Community</div>
         <div className="stat-value">{communityUsers}</div>
         <div className="muted" style={{marginTop:'.25rem'}}>Total users</div>
+      </div>
+
+      <div
+        className="card chart-card"
+        role="region"
+        aria-label="Session distribution chart"
+        style={{ minHeight: 320, display: 'flex', flexDirection: 'column', gap: '1rem' }}
+      >
+        <div>
+          <h4 style={{ margin: 0 }}>Session mix</h4>
+          <div className="muted">A quick look at how you split learning vs teaching</div>
+        </div>
+        <div style={{ flex: 1, minHeight: 240 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <PieChart>
+              <Pie
+                data={sessionMix}
+                dataKey="value"
+                nameKey="name"
+                innerRadius={sessionMix?.[0]?.isPlaceholder ? '60%' : '55%'}
+                outerRadius="80%"
+                paddingAngle={sessionMix?.[0]?.isPlaceholder ? 0 : 6}
+              >
+                {sessionMix.map((entry, index) => (
+                  <Cell
+                    key={entry.name}
+                    fill={entry.isPlaceholder ? 'rgba(148, 163, 184, 0.3)' : palette[index % palette.length]}
+                    stroke={entry.isPlaceholder ? 'rgba(148, 163, 184, 0.6)' : palette[index % palette.length]}
+                    strokeWidth={entry.isPlaceholder ? 1 : 2}
+                  />
+                ))}
+                {!sessionMix?.[0]?.isPlaceholder && (
+                  <LabelList
+                    dataKey="value"
+                    position="inside"
+                    formatter={value => `${value}`}
+                    fill="#f8fafc"
+                    style={{ fontWeight: 600 }}
+                  />
+                )}
+              </Pie>
+              <Tooltip
+                formatter={(value, name) => [`${value}`, name]}
+                contentStyle={{ borderRadius: 12, border: '1px solid rgba(99,102,241,0.25)' }}
+              />
+              {!sessionMix?.[0]?.isPlaceholder && (
+                <Legend
+                  verticalAlign="bottom"
+                  height={36}
+                  iconType="circle"
+                  formatter={(value, entry) => (
+                    <span style={{ color: 'var(--text-primary, #0f172a)', fontSize: '0.9rem' }}>{value}</span>
+                  )}
+                />
+              )}
+            </PieChart>
+          </ResponsiveContainer>
+        </div>
+        {sessionMix?.[0]?.isPlaceholder ? (
+          <div className="muted" style={{ textAlign: 'center' }}>
+            Book your first session to populate this chart.
+          </div>
+        ) : (
+          <div style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+            {sessionDetails.map(detail => (
+              <div key={detail.label} style={{ minWidth: 140 }}>
+                <div style={{ fontWeight: 700 }}>{detail.label}</div>
+                <div className="muted">{detail.value} sessions · {detail.percent}%</div>
+              </div>
+            ))}
+            <div style={{ minWidth: 140 }}>
+              <div style={{ fontWeight: 700 }}>Total sessions</div>
+              <div className="muted">{totalSessions}</div>
+            </div>
+          </div>
+        )}
+      </div>
+
+      <div
+        className="card chart-card"
+        role="region"
+        aria-label="Activity snapshot chart"
+        style={{ minHeight: 320, display: 'flex', flexDirection: 'column', gap: '1rem' }}
+      >
+        <div>
+          <h4 style={{ margin: 0 }}>Activity snapshot</h4>
+          <div className="muted">Points and sessions compared side-by-side</div>
+        </div>
+        <div style={{ flex: 1, minHeight: 240 }}>
+          <ResponsiveContainer width="100%" height="100%">
+            <BarChart data={summaryBar} barSize={42}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(148,163,184,0.25)" />
+              <XAxis dataKey="name" tick={{ fill: 'var(--text-primary, #111827)' }} />
+              <YAxis allowDecimals={false} tick={{ fill: 'var(--text-primary, #111827)' }} />
+              <Tooltip formatter={(value, name) => [`${value}`, name]} contentStyle={{ borderRadius: 12, border: '1px solid rgba(99,102,241,0.25)' }} />
+              <Bar dataKey="value" radius={[12, 12, 12, 12]}>
+                {summaryBar.map((entry, index) => (
+                  <Cell key={entry.name} fill={palette[index % palette.length]} />
+                ))}
+                <LabelList dataKey="value" position="top" formatter={value => `${value}`} fill="var(--text-primary, #0f172a)" style={{ fontWeight: 600 }} />
+              </Bar>
+            </BarChart>
+          </ResponsiveContainer>
+        </div>
+        <div style={{ display: 'grid', gap: '0.75rem' }}>
+          {barDetails.map(detail => (
+            <div key={detail.label} style={{ display: 'flex', flexDirection: 'column', gap: '0.15rem' }}>
+              <span style={{ fontWeight: 700 }}>{detail.label}</span>
+              <span className="muted">{detail.value} · {detail.helper}</span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

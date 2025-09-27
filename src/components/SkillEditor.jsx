@@ -17,7 +17,12 @@ import {
   Alert,
   InputAdornment,
   Tooltip,
-  FormHelperText
+  FormHelperText,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Slide
 } from '@mui/material';
 import { validateSkill } from '../utils/validation';
 import SchoolIcon from '@mui/icons-material/School';
@@ -27,24 +32,30 @@ import StarBorderIcon from '@mui/icons-material/StarBorder';
 import AddIcon from '@mui/icons-material/Add';
 import SaveIcon from '@mui/icons-material/Save';
 
+const Transition = React.forwardRef(function Transition(props, ref) {
+  return <Slide direction="up" ref={ref} {...props} />;
+});
+
 const API_BASE = 'http://localhost:5044';
 const LEVELS = ['Beginner', 'Intermediate', 'Advanced']; // enum : 0,1,2
 
-function SkillList({ title, list, onRemove, categories }) {
+function SkillList({ title, list, onRemove, onEdit, categories, type }) {
   return (
     <Box sx={{ mb: 2 }}>
       <Typography variant="subtitle2" sx={{ mb: 1 }}>{title}</Typography>
       <Stack direction="row" spacing={1} flexWrap="wrap" useFlexGap>
         {list.length === 0 &&
           <Typography variant="caption" color="text.secondary">None yet</Typography>}
-        {list.map(s => (
+        {list.map((s, index) => (
           <Chip
             key={s.id || s.skill + s.level}
             label={`${s.skill}${s.level ? ' · ' + s.level : ''}${s.categoryId ? ' · ' + (categories.find(c=>String(c.categoryId)===String(s.categoryId))?.name || '') : ''}`}
             onDelete={() => onRemove(s)}
+            onClick={() => onEdit(s, index, type)}
             size="small"
             color={title.includes('Teach') ? 'primary' : 'default'}
             variant={title.includes('Teach') ? 'filled' : 'outlined'}
+            sx={{ cursor: 'pointer' }}
           />
         ))}
       </Stack>
@@ -64,7 +75,16 @@ export default function SkillEditor() {
   const [skillError, setSkillError] = useState('');
   const [categoryError, setCategoryError] = useState('');
   const [saving, setSaving] = useState(false);
-  const [savedOpen, setSavedOpen] = useState(false);
+  const [snackbar, setSnackbar] = useState({ open: false, message: '', severity: 'success' });
+  const [editOpen, setEditOpen] = useState(false);
+  const [editInfo, setEditInfo] = useState(null);
+  const [editMode, setEditMode] = useState('teach');
+  const [editSkill, setEditSkill] = useState('');
+  const [editCategoryId, setEditCategoryId] = useState('');
+  const [editLevel, setEditLevel] = useState('Beginner');
+  const [editError, setEditError] = useState('');
+  const [editCategoryError, setEditCategoryError] = useState('');
+  const [editSaving, setEditSaving] = useState(false);
 
   useEffect(() => {
     fetch(`${API_BASE}/api/Categories/`)
@@ -149,6 +169,101 @@ export default function SkillEditor() {
     if (s.id) fetch(`${API_BASE}/api/UserSkills/${s.id}`, { method: 'DELETE' });
   };
 
+  const openEditModal = (skill, index, type) => {
+    setEditInfo({ index, type, id: skill.id, original: skill });
+    setEditMode(type);
+    setEditSkill(skill.skill);
+    setEditCategoryId(skill.categoryId || '');
+    setEditLevel(type === 'teach' ? (LEVELS.includes(skill.level) ? skill.level : 'Beginner') : 'Any');
+    setEditError('');
+    setEditCategoryError('');
+    setEditOpen(true);
+  };
+
+  const handleEditClose = () => {
+    setEditOpen(false);
+    setEditInfo(null);
+    setEditError('');
+    setEditCategoryError('');
+    setEditSaving(false);
+  };
+
+  const updateLocalSkill = (updatedSkill) => {
+    if (!editInfo) return;
+    if (editInfo.type === 'teach') {
+      setTeach(prev => prev.map((item, idx) => (
+        idx === editInfo.index ? { ...item, ...updatedSkill } : item
+      )));
+    } else {
+      setLearn(prev => prev.map((item, idx) => (
+        idx === editInfo.index ? { ...item, ...updatedSkill } : item
+      )));
+    }
+  };
+
+  const handleEditSave = async () => {
+    if (!editInfo) return;
+    const trimmed = editSkill.trim();
+    const validationError = validateSkill(trimmed);
+    setEditError(validationError);
+    if (validationError) return;
+    if (!editCategoryId) {
+      setEditCategoryError('Category required');
+      return;
+    }
+
+    const typeFlag = editMode === 'teach' ? 0 : 1;
+    const levelFlag = editMode === 'teach' ? LEVELS.indexOf(editLevel) : 0;
+    setEditSaving(true);
+
+    const applyAndNotify = (updatedData) => {
+      updateLocalSkill(updatedData);
+      setSnackbar({ open: true, message: 'Skill updated', severity: 'success' });
+      handleEditClose();
+    };
+
+    try {
+      if (editInfo.id) {
+        const res = await fetch(`${API_BASE}/api/UserSkills/${editInfo.id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            userId: currentUser.id,
+            categoryId: editCategoryId,
+            skillName: trimmed,
+            type: typeFlag,
+            level: levelFlag
+          })
+        });
+        if (!res.ok) {
+          throw new Error('Failed to update skill');
+        }
+        const updated = await res.json();
+        applyAndNotify({
+          id: updated.userSkillId,
+          skill: updated.skillName,
+          level: editMode === 'teach' ? (LEVELS[updated.level] || editLevel) : 'Any',
+          categoryId: updated.categoryId
+        });
+      } else {
+        applyAndNotify({
+          skill: trimmed,
+          level: editMode === 'teach' ? editLevel : 'Any',
+          categoryId: editCategoryId
+        });
+      }
+    } catch (err) {
+      console.error('Edit skill failed', err);
+      setSnackbar({ open: true, message: err.message || 'Unable to update skill', severity: 'error' });
+      setEditSaving(false);
+    }
+  };
+
+  const handleSnackbarClose = (_event, reason) => {
+    if (reason === 'clickaway') return;
+    setSnackbar(prev => ({ ...prev, open: false }));
+  };
+
   const save = async () => {
     setSaving(true);
     const newSkills = [...teach.map(s => ({ ...s, type: 0 })),
@@ -195,8 +310,11 @@ export default function SkillEditor() {
       });
       setTeach(teachList);
       setLearn(learnList);
-      setSavedOpen(true);
-    } catch {}
+      setSnackbar({ open: true, message: 'Skills saved', severity: 'success' });
+    } catch (err) {
+      console.error('Failed to refresh skills', err);
+      setSnackbar({ open: true, message: 'Skills saved locally, but refresh failed', severity: 'warning' });
+    }
     finally {
       setSaving(false);
     }
@@ -272,10 +390,10 @@ export default function SkillEditor() {
 
       <Stack direction={{ xs: 'column', sm: 'row' }} spacing={2} useFlexGap>
         <Box sx={{ flex: 1 }}>
-          <SkillList title="Can Teach" list={teach} onRemove={removeTeach} categories={categories} />
+          <SkillList title="Can Teach" list={teach} onRemove={removeTeach} onEdit={openEditModal} categories={categories} type="teach" />
         </Box>
         <Box sx={{ flex: 1 }}>
-          <SkillList title="Want to Learn" list={learn} onRemove={removeLearn} categories={categories} />
+          <SkillList title="Want to Learn" list={learn} onRemove={removeLearn} onEdit={openEditModal} categories={categories} type="learn" />
         </Box>
       </Stack>
 
@@ -293,9 +411,85 @@ export default function SkillEditor() {
         </Tooltip>
       </Box>
 
-      <Snackbar open={savedOpen} autoHideDuration={2000} onClose={() => setSavedOpen(false)} anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}>
-        <Alert severity="success" variant="filled" sx={{ width: '100%' }} onClose={() => setSavedOpen(false)}>
-          Skills saved
+      <Dialog
+        open={editOpen}
+        TransitionComponent={Transition}
+        keepMounted
+        onClose={handleEditClose}
+        maxWidth="xs"
+        fullWidth
+        PaperProps={{ sx: { borderRadius: 3 } }}
+      >
+        <DialogTitle>Edit skill</DialogTitle>
+        <DialogContent dividers>
+          <Stack spacing={2} sx={{ mt: 1 }}>
+            <TextField
+              label="Skill name"
+              value={editSkill}
+              onChange={e => {
+                const val = e.target.value;
+                setEditSkill(val);
+                setEditError(validateSkill(val.trim()));
+              }}
+              error={!!editError}
+              helperText={editError || ' '}
+              autoFocus
+            />
+            <FormControl size="small" error={!!editCategoryError}>
+              <InputLabel>Category</InputLabel>
+              <Select
+                value={editCategoryId}
+                label="Category"
+                onChange={e => {
+                  setEditCategoryId(e.target.value);
+                  setEditCategoryError('');
+                }}
+              >
+                {categories.map(c => (
+                  <MenuItem key={c.categoryId} value={c.categoryId}>{c.name}</MenuItem>
+                ))}
+              </Select>
+              {editCategoryError && <FormHelperText>{editCategoryError}</FormHelperText>}
+            </FormControl>
+            {editMode === 'teach' ? (
+              <FormControl size="small">
+                <InputLabel>Level</InputLabel>
+                <Select
+                  value={editLevel}
+                  label="Level"
+                  onChange={e => setEditLevel(e.target.value)}
+                >
+                  {LEVELS.map(l => <MenuItem key={l} value={l}>{l}</MenuItem>)}
+                </Select>
+              </FormControl>
+            ) : (
+              <Alert severity="info" variant="outlined">
+                Learning skills don’t track level. Update the name or category and we’ll keep it fresh.
+              </Alert>
+            )}
+          </Stack>
+        </DialogContent>
+        <DialogActions sx={{ p: 2 }}>
+          <Button onClick={handleEditClose} disabled={editSaving}>Cancel</Button>
+          <Button onClick={handleEditSave} variant="contained" disabled={editSaving}>
+            {editSaving ? 'Updating…' : 'Save' }
+          </Button>
+        </DialogActions>
+      </Dialog>
+
+      <Snackbar
+        open={snackbar.open}
+        autoHideDuration={2200}
+        onClose={handleSnackbarClose}
+        anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+      >
+        <Alert
+          severity={snackbar.severity}
+          variant="filled"
+          sx={{ width: '100%' }}
+          onClose={handleSnackbarClose}
+        >
+          {snackbar.message}
         </Alert>
       </Snackbar>
     </div>

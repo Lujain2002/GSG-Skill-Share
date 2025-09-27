@@ -288,22 +288,7 @@ export default function Home({ onStartSignup, onStartLogin }) {
               whileHover={{ scale: 1.02, x: 2 }}
               whileTap={{ scale: 0.97 }}
             >
-              <Button
-                size="large"
-                variant="text"
-                onClick={() => setDevelopersOpen(true)}
-                sx={{
-                  color:ACCENT,
-                  px:{ xs:1.8, md:2.4 },
-                  py:{ xs:1, md:1.1 },
-                  fontSize:{ xs:'0.9rem', md:'1rem' },
-                  fontWeight:600,
-                  letterSpacing:'0.06em',
-                  '&:hover':{ color:'#545766', bgcolor:'transparent' }
-                }}
-              >
-                Meet the developers
-              </Button>
+        
             </MotionButtonWrapper>
           </Stack>
         </MotionContainer>
@@ -687,9 +672,32 @@ export default function Home({ onStartSignup, onStartLogin }) {
               >
                 Already have an account? Log in
               </Button>
+              
             </MotionButtonWrapper>
+
+            
           )}
         </MotionStack>
+        <br></br>
+        <br></br>
+        <br></br>
+        <br></br>
+              <Button
+                size="large"
+                variant="text"
+                onClick={() => setDevelopersOpen(true)}
+                sx={{
+                  color:ACCENT,
+                  px:{ xs:1.8, md:2.4 },
+                  py:{ xs:1, md:1.1 },
+                  fontSize:{ xs:'0.9rem', md:'1rem' },
+                  fontWeight:600,
+                  letterSpacing:'0.06em',
+                  '&:hover':{ color:'#545766', bgcolor:'transparent' }
+                }}
+              >
+                Meet the developers
+              </Button>
       </Container>
       </Box>
       <Developers open={isDevelopersOpen} onClose={() => setDevelopersOpen(false)} />
